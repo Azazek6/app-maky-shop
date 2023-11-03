@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import NProgress from "nprogress";
 import NavegationTop from "./Navegation/NavegationTop";
+import Footer from "./Footer";
 
 const Layout = ({ title, children }) => {
   const router = useRouter();
@@ -27,7 +28,9 @@ const Layout = ({ title, children }) => {
 
       <NavegationTop />
 
-      <main className="w-[100%] px-6 py-2">{children}</main>
+      <main className="w-[100%] px-6 py-2 mt-24">{children}</main>
+
+      <Footer />
     </>
   );
 };

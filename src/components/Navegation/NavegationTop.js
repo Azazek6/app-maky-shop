@@ -8,7 +8,7 @@ import {
 
 const NavegationTop = () => {
   return (
-    <nav className="flex justify-between items-center gap-3 w-[100%] p-6">
+    <nav className="flex justify-between items-center gap-3 w-[100%] p-6 fixed z-50 top-0 left-0 bg-white">
       <div className="w-[22%] ml-10">
         <Link
           href="/"
