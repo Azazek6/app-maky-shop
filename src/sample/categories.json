@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 1, 1, 0]
+  },
+  {
+    "id": 2,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 1, 1, 1]
+  },
+  {
+    "id": 3,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  },
+  {
+    "id": 4,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  },
+  {
+    "id": 5,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  },
+  {
+    "id": 6,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  },
+  {
+    "id": 7,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  },
+  {
+    "id": 8,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  }
+]

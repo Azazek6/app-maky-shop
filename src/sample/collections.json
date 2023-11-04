@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 1, 1, 0]
+  },
+  {
+    "id": 2,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 1, 1, 1]
+  },
+  {
+    "id": 3,
+    "image": "card-item.png",
+    "description": "Nike Air Men's Hoodie - Imported Hoodie Red",
+    "price": "150",
+    "stars": [1, 0, 0, 0]
+  }
+]

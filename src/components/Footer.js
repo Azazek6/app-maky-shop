@@ -11,7 +11,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="mt-12 bg-[#FCCB90] bg-opacity-40 px-16 py-7 grid grid-cols-1 xl:grid-cols-5 gap-12">
+    <footer className="mt-12 bg-[#FCCB90] bg-opacity-40 px-20 py-10 grid grid-cols-1 xl:grid-cols-5 gap-12">
       <div className="w-[100%]">
         <Link
           href="/"
@@ -121,13 +121,13 @@ const Footer = () => {
           </div>
           <span className="text-xs">123 Street Trafford, London, UK</span>
         </div>
-        <div className="ml-2 mt-3 flex items-center gap-2">
+        <div className="ml-2 mt-5 flex items-center gap-2">
           <div className="flex items-center bg-[#FF5E3A] rounded-full p-1">
             <IoMail className="text-white text-xs" />
           </div>
           <span className="text-xs">info@sitename.com</span>
         </div>
-        <div className="ml-2 mt-3 flex items-center gap-2">
+        <div className="ml-2 mt-5 flex items-center gap-2">
           <div className="flex items-center bg-[#FF5E3A] rounded-full p-1">
             <IoCall className="text-white text-xs" />
           </div>
