@@ -28,7 +28,7 @@ const Layout = ({ title, children }) => {
 
       <NavegationTop />
 
-      <main className="w-[100%] px-6 py-2 mt-24">{children}</main>
+      <main className="w-[100%] px-6 py-2 mt-14">{children}</main>
 
       <Footer />
     </>

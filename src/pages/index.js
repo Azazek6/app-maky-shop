@@ -2,8 +2,10 @@ import React from "react";
 import { HiMiniStar } from "react-icons/hi2";
 import Layout from "@/components/Layout";
 import CardItem from "@/components/CardItem";
+import ReviewCardItem from "@/components/ReviewCardItem";
 import collections from "@/sample/collections.json";
 import categories from "@/sample/categories.json";
+import reviews from "@/sample/reviews.json";
 
 const Home = () => {
   return (
@@ -70,12 +72,18 @@ const Home = () => {
       </section>
       {/* Titulo seccion */}
       <div className="w-full text-center mt-8">
-        <h3 className="font-medium text-xs">ESTAD&Iacute;STICAS</h3>
+        <h3 className="font-medium text-xs">RESEÑAS</h3>
         <center>
           <img src="/Exclude.png" className="w-[65px]" alt="separador" />
         </center>
-        <h2 className="mt-2 font-bold">Nuestra Estadistica</h2>
+        <h2 className="mt-2 font-bold">Opinion de los compradores</h2>
       </div>
+      {/* SECCION */}
+      <section className="m-auto w-[100%] sm:w-[72%] p-8 mt-1">
+        <div className=" grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ReviewCardItem item={reviews} />
+        </div>
+      </section>
     </Layout>
   );
 };

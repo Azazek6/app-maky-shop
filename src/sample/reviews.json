@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "image": "user-reseña.png",
+    "color": "bg-[#FF5E3A]",
+    "name": "Nombre 1",
+    "description": "Lorem Ispum is a placeholder text commomly used as a free text.",
+    "date": "10 January 2021"
+  },
+  {
+    "id": 2,
+    "image": "user-reseña.png",
+    "color": "bg-[#F3A916]",
+    "name": "Nombre 2",
+    "description": "Lorem Ispum is a placeholder text commomly used as a free text.",
+    "date": "10 January 2021"
+  },
+  {
+    "id": 3,
+    "image": "user-reseña.png",
+    "color": "bg-[#FEACB6]",
+    "name": "Nombre 3",
+    "description": "Lorem Ispum is a placeholder text commomly used as a free text.",
+    "date": "10 January 2021"
+  }
+]
