@@ -1,5 +1,4 @@
 import React from "react";
-import { HiMiniStar } from "react-icons/hi2";
 import Layout from "@/components/Layout";
 import CardItem from "@/components/CardItem";
 import ReviewCardItem from "@/components/ReviewCardItem";

@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { GlobalContext } from "./GlobalContext";
 
@@ -11,5 +11,20 @@ export const useGlobal = () => {
 };
 
 export const GlobalContextProvider = ({ children }) => {
-  return <GlobalContext.Provider value={{}}>{children}</GlobalContext.Provider>;
+  //Estado de Navegacion
+  const [showCredentials, setShowCredentials] = useState(false);
+
+  //FUNCIONES
+  const handleClickShowCredential = ()=> setShowCredentials(!showCredentials)
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        showCredentials,
+        handleClickShowCredential
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
 };

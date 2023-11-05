@@ -7,8 +7,10 @@ import {
   HiOutlineUser,
   HiOutlineBell,
 } from "react-icons/hi2";
+import { useGlobal } from "../../context/GlobalProvider";
 
 const NavegationTop = () => {
+  const { handleClickShowCredential } = useGlobal();
   const [actionBar, setActionBar] = useState(false);
 
   return (
@@ -56,7 +58,8 @@ const NavegationTop = () => {
             <HiOutlineMagnifyingGlass />
           </Link>
           <Link
-            href="/signin"
+            href="/"
+            onClick={handleClickShowCredential}
             className="hover:text-[#FF5151] hover:font-bold text-2xl"
           >
             <HiOutlineUser />
