@@ -12,16 +12,20 @@ export const useGlobal = () => {
 
 export const GlobalContextProvider = ({ children }) => {
   //Estado de Navegacion
+  const [actionBar, setActionBar] = useState(false);
   const [showCredentials, setShowCredentials] = useState(false);
 
   //FUNCIONES
-  const handleClickShowCredential = ()=> setShowCredentials(!showCredentials)
+  const handleClickShowActionBar = () => setActionBar(!actionBar);
+  const handleClickShowCredential = () => setShowCredentials(!showCredentials);
 
   return (
     <GlobalContext.Provider
       value={{
+        actionBar,
         showCredentials,
-        handleClickShowCredential
+        handleClickShowActionBar,
+        handleClickShowCredential,
       }}
     >
       {children}

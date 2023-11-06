@@ -10,8 +10,8 @@ import {
 import { useGlobal } from "../../context/GlobalProvider";
 
 const NavegationTop = () => {
-  const { handleClickShowCredential } = useGlobal();
-  const [actionBar, setActionBar] = useState(false);
+  const { actionBar, handleClickShowActionBar, handleClickShowCredential } =
+    useGlobal();
 
   return (
     <>
@@ -21,16 +21,12 @@ const NavegationTop = () => {
             {!actionBar ? (
               <HiMiniBars3
                 className="text-2xl cursor-pointer "
-                onClick={() => {
-                  setActionBar(!actionBar);
-                }}
+                onClick={handleClickShowActionBar}
               />
             ) : (
               <HiOutlineXMark
                 className="text-2xl cursor-pointer "
-                onClick={() => {
-                  setActionBar(!actionBar);
-                }}
+                onClick={handleClickShowActionBar}
               />
             )}
           </div>
@@ -74,8 +70,8 @@ const NavegationTop = () => {
       </nav>
       {/* NAVEGACION MOBIL */}
       <nav
-        className={`w-[100%] flex-row ${
-          actionBar ? "mt-24 -mb-10" : "-mt-40 -mb-0"
+        className={`w-[100%] flex-row z-50 top-0 left-0 fixed mt-20 ${
+          actionBar ? "ml-0" : "-ml-[100%] bg-transparent"
         }  bg-[#a5abb877] items-center py-3 px-5 transition-all duration-500 ease-in-out`}
       >
         <div className="w-[100%]">
