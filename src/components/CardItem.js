@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { HiMiniStar } from "react-icons/hi2";
 
 const CardItem = ({ item }) => {
@@ -13,9 +14,9 @@ const CardItem = ({ item }) => {
             <img className="w-[100px] sm:w-[150px]" src={`/${image}`} alt="" />
           </div>
           <div className="flex-row bg-white py-3 px-5">
-            <p className="text-[10px] font-bold sm:text-xs sm:font-normal">
+            <Link href={`/product/${id}`} className="text-[10px] font-bold sm:text-xs sm:font-normal hover:text-[#FF5E3A]">
               {description}
-            </p>
+            </Link>
             <div className="w-[100%] flex items-center justify-between mt-5">
               <button className="bg-[#FF5E3A] hover:opacity-70 text-xs sm:text-sm text-white py-1 px-5 font-bold rounded-xl">
                 ${price}

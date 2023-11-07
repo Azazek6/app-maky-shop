@@ -41,7 +41,7 @@ const Layout = ({ title, children }) => {
       <Footer />
 
       {/* CREDENCIALES */}
-      <SignIn />
+      {showCredentials && (<SignIn />)} 
 
       {/* FIN CREDENCIALES */}
     </>
