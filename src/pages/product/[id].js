@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { HiMiniStar } from "react-icons/hi2";
+import { HiMiniHome, HiMiniStar } from "react-icons/hi2";
 import Layout from "@/components/Layout";
 import Accordeon from "@/components/Accordeon";
+import BreadCrumbsData from "@/components/BreadCrumbsData";
 
 const Product = () => {
   const router = useRouter();
+
+  const breadcrumbsData = [
+    { url: "/", label: <HiMiniHome /> },
+    { url: "/product", label: "Productos" },
+    { url: "/product/2", label: "Zip Tote Basket" },
+  ];
 
   // Estado para guardar el color seleccionado
   const [selectedColor, setSelectedColor] = useState("");
@@ -34,6 +41,10 @@ const Product = () => {
 
   return (
     <Layout title="| PRODUCTO">
+      <div className="mb-5 flex items-center justify-center">
+        <BreadCrumbsData items={breadcrumbsData} />
+      </div>
+
       <div className="w-[100%] px-6 py-2 flex">
         <div className="w-[50%]">
           <div className="flex-row">
@@ -280,7 +291,7 @@ const Product = () => {
           </div>
 
           {/* DETALLES */}
-          <div className="mt-5">
+          <div className="mt-7">
             <Accordeon
               title="Detalle del Producto"
               content="The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming Charcoal Gray limited release."

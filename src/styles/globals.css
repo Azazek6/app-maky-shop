@@ -8,12 +8,12 @@
 
 /* Progress Bar */
 #nprogress .bar {
-  background: #ec1111 !important;
+  background: #FF5E3A !important;
 }
 
 #nprogress .spinner-icon {
-  border-top-color: #ec1111;
-  border-left-color: #ec1111;
+  border-top-color: #FF5E3A;
+  border-left-color: #FF5E3A;
 }
 
 body {
