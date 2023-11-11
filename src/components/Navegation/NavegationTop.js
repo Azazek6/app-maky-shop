@@ -6,6 +6,7 @@ import {
   HiOutlineMagnifyingGlass,
   HiOutlineUser,
   HiOutlineBell,
+  HiOutlineWrenchScrewdriver
 } from "react-icons/hi2";
 import { useGlobal } from "../../context/GlobalProvider";
 
@@ -61,6 +62,14 @@ const NavegationTop = () => {
             <HiOutlineUser />
           </Link>
           <Link
+            href="/admin/signin"
+            target="_blank"
+            title="Dashboard"
+            className="hover:text-[#FF5151] hover:font-bold text-2xl"
+          >
+            <HiOutlineWrenchScrewdriver />
+          </Link>
+          <Link
             href=""
             className="hover:text-[#FF5151] hover:font-bold text-2xl"
           >
@@ -107,6 +116,16 @@ const NavegationTop = () => {
             className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
           >
             Iniciar Sesi&oacute;n
+          </Link>
+        </div>
+        <div className="w-[100%] mt-2">
+        <Link
+            href="/admin/signin"
+            target="_blank"
+            title="Dashboard"
+            className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
+          >
+            <HiOutlineWrenchScrewdriver />
           </Link>
         </div>
         <div className="w-[100%] mt-2">
