@@ -1,29 +1,30 @@
 import { useState } from "react";
 import InputComponent from "../InputComponent";
 
-const BrandForm = () => {
+const CategoryForm = () => {
   //Estados
   const [isChecked, setIsChecked] = useState(true);
-  const [brandForm, setBrandForm] = useState({
+  const [categoryForm, setCategoryForm] = useState({
     name: "",
     status: true,
   });
 
   //Funciones generales
-  const handleChange = ({ target: { name, value } }) => {
-    setBrandForm({ ...brandForm, [name]: value });
-  };
-
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
   };
+
+  const handleChange = ({ target: { name, value } }) => {
+    setCategoryForm({ ...categoryForm, [name]: value });
+  };
+
   return (
     <div className="flex-row">
       <form>
         <div className="w-[100%] flex-row gap-5 items-center sm:flex">
           <InputComponent
             name="name"
-            value={brandForm.name}
+            value={categoryForm.name}
             onChange={handleChange}
             type="text"
             placeholder="Nombre"
@@ -76,4 +77,4 @@ const BrandForm = () => {
   );
 };
 
-export default BrandForm;
+export default CategoryForm;

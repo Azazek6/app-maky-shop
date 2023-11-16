@@ -2,6 +2,37 @@ import React from "react";
 import { useRouter } from "next/router";
 import { HiMagnifyingGlass, HiMiniPlusCircle } from "react-icons/hi2";
 import Layout from "@/components/Admin/Layout";
+import TableGeneral from "@/components/Admin/Table/TableGeneral";
+
+const brandList = [
+  {
+    nombre: "SCR324G5",
+    estado: "Activo",
+  },
+  {
+    nombre: "SCR324G5",
+    estado: "Activo",
+  },
+  {
+    nombre: "SCR324G5",
+    estado: "Activo",
+  },
+  {
+    nombre: "SCR324G5",
+    estado: "Activo",
+  },
+];
+
+const title = [
+  {
+    id: "nombre",
+    name: "Nombre",
+  },
+  {
+    id: "estado",
+    name: "Estado",
+  },
+];
 
 const Brand = () => {
   const router = useRouter();
@@ -31,6 +62,10 @@ const Brand = () => {
             Nueva Marca
           </button>
         </div>
+      </div>
+      {/* TABLA DE DATOS */}
+      <div className="w-[100%] mt-8">
+        <TableGeneral title={title} data={brandList} section="/brand/edit/1" />
       </div>
     </Layout>
   );
