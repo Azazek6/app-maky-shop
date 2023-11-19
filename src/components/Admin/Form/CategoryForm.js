@@ -68,7 +68,7 @@ const CategoryForm = () => {
           </label>
         </div>
         <div className="w-[100%] sm:text-right mt-10">
-          <button className="bg-[#ff5151] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md">
+          <button className="bg-[#ff5151] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out">
             Registrar
           </button>
         </div>

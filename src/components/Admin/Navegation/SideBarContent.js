@@ -11,7 +11,7 @@ import {
 
 const SideBarContent = ({ children }) => {
   return (
-    <div className="w-[100%] flex h-screen bg-[#efeff7]">
+    <div className="w-[100%] flex h-screen bg-[#efeff7] overflow-hidden">
       {/* SIDEBAR DE OPCIONES */}
       <div className="w-[25%] bg-white border">
         <div className="w-[100%] border-b-2 p-[19px]">
@@ -91,7 +91,7 @@ const SideBarContent = ({ children }) => {
           </div>
         </div>
         {/* CONTENIDO */}
-        <div className="w-[100%] p-5">{children}</div>
+        <div className="w-[100%] p-5 overflow-x-auto max-h-[720px] sd:max-h-[100px]">{children}</div>
       </div>
     </div>
   );
