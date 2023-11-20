@@ -5,7 +5,7 @@ const InputFileComponent = ({ handleChange, file }) => {
     <>
       <label
         htmlFor="fileInput"
-        className="cursor-pointer bg-gradient-to-r from-red-500 to-amber-500 font-bold text-white py-2 px-4 rounded-md hover:opacity-70 transition-all duration-300 ease-in-out shadow-md inline-flex items-center"
+        className="w-[100%] cursor-pointer bg-gradient-to-r from-red-500 to-amber-500 font-bold text-white py-2 px-4 rounded-md hover:opacity-70 transition-all duration-300 ease-in-out shadow-md inline-flex items-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@ const InputFileComponent = ({ handleChange, file }) => {
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           />
         </svg>
-        <span>Seleccionar Imagen del Producto</span>
+        <span className="text-xs sm:text-sm">Seleccionar Imagen</span>
       </label>
       <input
         type="file"
@@ -30,7 +30,7 @@ const InputFileComponent = ({ handleChange, file }) => {
         onChange={handleChange}
       />
       {file && (
-        <span className="ml-2 bg-gray-800 text-white py-1 px-2 rounded-md">
+        <span className="w-[100%] text-xs sm:text-sm ml-2 text-center bg-gray-800 text-white py-1 px-2 rounded-md">
           {file.name}
         </span>
       )}

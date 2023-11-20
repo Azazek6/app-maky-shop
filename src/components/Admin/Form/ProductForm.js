@@ -66,7 +66,7 @@ const ProductForm = () => {
           <SelectedComponent title="Marca" classStyle="mb-4 sm:mb-0" />
           <SelectedComponent title="Categoria" />
         </div>
-        <h2 className="m-5 text-sm sm:text-lg text-[#ff7f51] font-semibold">
+        <h2 className="mt-5 text-sm sm:text-lg text-[#ff7f51] font-semibold">
           TALLAS:
         </h2>
         <div className="flex items-center justify-center">
@@ -91,10 +91,7 @@ const ProductForm = () => {
             activate={isCheckedXL}
           />
         </div>
-        <h2 className="mx-5 mt-8 text-sm sm:text-lg text-[#ff7f51] font-semibold">
-          COLORES:
-        </h2>
-        <div className="mt-5 relative flex items-center">
+        <div className="mt-8 relative flex-row lg:flex items-center">
           <InputFileComponent
             file={selectedFile}
             handleChange={handleFileChange}
@@ -104,7 +101,7 @@ const ProductForm = () => {
           <TextComponent />
         </div>
         <div className="w-[100%] sm:text-right mt-5">
-          <button className="bg-[#ff5151] text-white font-bold p-2 w-[100%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out">
+          <button className="bg-[#ff5151] text-xs sm:text-base text-white font-bold p-2 w-[100%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out">
             Registrar
           </button>
         </div>

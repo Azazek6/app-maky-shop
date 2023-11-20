@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   FaBars,
@@ -10,10 +10,16 @@ import {
 } from "react-icons/fa6";
 
 const SideBarContent = ({ children }) => {
+  const [toogleSideBar, setToogleSideBar] = useState(true);
+
   return (
     <div className="w-[100%] flex h-screen bg-[#efeff7] overflow-hidden">
       {/* SIDEBAR DE OPCIONES */}
-      <div className="w-[25%] bg-white border">
+      <div
+        className={`${
+          toogleSideBar ? "w-[100%] sm:w-[80%] md:w-[25%]" : "w-[0%]"
+        } bg-white border transition-all duration-500 ease-in-out`}
+      >
         <div className="w-[100%] border-b-2 p-[19px]">
           <Link
             href=""
@@ -23,64 +29,79 @@ const SideBarContent = ({ children }) => {
             MAKYS PANEL
           </Link>
         </div>
+        {toogleSideBar && (
+          <>
+            <h2 className="mt-3 text-center text-xs text-[#606879]">
+              Todo el nombre del usuario
+            </h2>
 
-        <h2 className="mt-3 text-center text-xs text-[#606879]">
-          Todo el nombre del usuario
-        </h2>
+            <h3 className="mt-5 p-5 text-sm font-bold text-[#FF5151]">
+              OPCIONES
+            </h3>
 
-        <h3 className="mt-5 p-5 text-sm font-bold text-[#FF5151]">OPCIONES</h3>
-
-        <div className="w-[100%] border-b-2 p-[19px]">
-          <Link
-            href=""
-            className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
-          >
-            <FaDiceFive />
-            Ventas
-          </Link>
-        </div>
-        <div className="w-[100%] border-b-2 p-[19px]">
-          <Link
-            href=""
-            className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
-          >
-            <FaDiceFour />
-            Pedidos
-          </Link>
-        </div>
-        <div className="w-[100%] border-b-2 p-[19px]">
-          <Link
-            href="/admin/dashboard/product"
-            className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
-          >
-            <FaDiceThree />
-            Productos
-          </Link>
-        </div>
-        <div className="w-[100%] border-b-2 p-[19px]">
-          <Link
-            href="/admin/dashboard/category"
-            className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
-          >
-            <FaDiceTwo />
-            Categorias
-          </Link>
-        </div>
-        <div className="w-[100%] border-b-2 p-[19px]">
-          <Link
-            href="/admin/dashboard/brand"
-            className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
-          >
-            <FaDiceOne />
-            Marcas
-          </Link>
-        </div>
+            <div className="w-[100%] border-b-2 p-[19px]">
+              <Link
+                href=""
+                className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
+              >
+                <FaDiceFive />
+                Ventas
+              </Link>
+            </div>
+            <div className="w-[100%] border-b-2 p-[19px]">
+              <Link
+                href=""
+                className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
+              >
+                <FaDiceFour />
+                Pedidos
+              </Link>
+            </div>
+            <div className="w-[100%] border-b-2 p-[19px]">
+              <Link
+                href="/admin/dashboard/product"
+                className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
+              >
+                <FaDiceThree />
+                Productos
+              </Link>
+            </div>
+            <div className="w-[100%] border-b-2 p-[19px]">
+              <Link
+                href="/admin/dashboard/category"
+                className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
+              >
+                <FaDiceTwo />
+                Categorias
+              </Link>
+            </div>
+            <div className="w-[100%] border-b-2 p-[19px]">
+              <Link
+                href="/admin/dashboard/brand"
+                className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
+              >
+                <FaDiceOne />
+                Marcas
+              </Link>
+            </div>
+          </>
+        )}
       </div>
-      <div className="w-[100%] flex-row">
+      <div
+        className={`${
+          toogleSideBar ? "max-[400px]:-mr-48" : "sm:mr-0"
+        } w-[100%] flex-row transition-all duration-500 ease-in-out`}
+      >
         {/* SIDEBAR TOP */}
         <div className="w-[100%] bg-white p-5 border">
           <div className="w-[100%] flex items-center justify-between">
-            <FaBars className="cursor-pointer text-2xl text-[#606879] hover:scale-110 transition-all duration-300 ease-in-out hover:text-[#3e4249]" />
+            {/* BARRA DE MENU */}
+            <FaBars
+              className="cursor-pointer text-2xl text-[#606879] hover:scale-110 transition-all duration-300 ease-in-out hover:text-[#3e4249]"
+              onClick={() => {
+                setToogleSideBar(!toogleSideBar);
+              }}
+            />
             <p className="text-xs text-[#606879]">ADMINISTRADOR</p>
             <Link
               href="/"
@@ -91,7 +112,9 @@ const SideBarContent = ({ children }) => {
           </div>
         </div>
         {/* CONTENIDO */}
-        <div className="w-[100%] p-5 overflow-x-auto max-h-[720px] sd:max-h-[100px]">{children}</div>
+        <div className="w-[100%] p-5 overflow-x-auto max-h-[720px] sd:max-h-[100px]">
+          {children}
+        </div>
       </div>
     </div>
   );
