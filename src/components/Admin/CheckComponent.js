@@ -1,9 +1,9 @@
 import react from "react";
 
-const CheckComponent = ({ toogle, activate, title }) => {
+const CheckComponent = ({ toogle, activate, title, classStyle}) => {
   return (
     <label
-      className={`w-[100%] mt-8 sm:w-[20%] sm:mt-0 flex items-center justify-center sm:justify-normal space-x-2 cursor-pointer ${
+      className={`${classStyle} w-[100%] flex items-center justify-center sm:justify-normal space-x-2 cursor-pointer transition-all duration-300 ease-in-out ${
         activate ? "text-[#ff7f51] font-bold" : "text-gray-700"
       }`}
       htmlFor="status"
@@ -18,7 +18,7 @@ const CheckComponent = ({ toogle, activate, title }) => {
       />
       <div
         //onClick={toggleCheckbox}
-        className="w-6 h-6 border-2 border-[#ff7f51] rounded-md flex items-center justify-center transition duration-300 ease-in-out group-hover:border-opacity-60"
+        className="w-6 h-6 border-2 border-[#ff7f51] rounded-md flex items-center justify-center transition-all duration-300 ease-in-out group-hover:border-opacity-60"
       >
         {activate && (
           <svg
@@ -37,7 +37,7 @@ const CheckComponent = ({ toogle, activate, title }) => {
           </svg>
         )}
       </div>
-      <span className="text-xs sm:text-sm">{title}</span>
+      <span className="text-xs sm:text-sm transition-all duration-150 ease-in-out">{title}</span>
     </label>
   );
 };

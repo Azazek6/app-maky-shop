@@ -28,6 +28,7 @@ const CategoryForm = () => {
             onChange={handleChange}
             type="text"
             placeholder="Nombre"
+            classStyle="sm:w-[50%]"
           />
           <label
             className={` w-[100%] mt-8 sm:w-[20%] sm:mt-0 flex items-center justify-center sm:justify-normal space-x-2 cursor-pointer ${

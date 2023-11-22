@@ -28,8 +28,9 @@ const BrandForm = () => {
             onChange={handleChange}
             type="text"
             placeholder="Nombre"
+            classStyle="sm:w-[50%]"
           />
-          <CheckComponent toogle={toggleCheckbox} activate={isChecked} />
+          <CheckComponent toogle={toggleCheckbox} activate={isChecked} classStyle="sm:w-[20%] sm:mt-0 mt-8"/>
         </div>
         <div className="w-[100%] sm:text-right mt-10">
           <button className="bg-[#ff5151] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out">
