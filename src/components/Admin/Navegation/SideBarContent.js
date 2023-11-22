@@ -7,6 +7,7 @@ import {
   FaDiceThree,
   FaDiceFour,
   FaDiceFive,
+  FaDiceSix,
 } from "react-icons/fa6";
 
 const SideBarContent = ({ children }) => {
@@ -39,6 +40,15 @@ const SideBarContent = ({ children }) => {
               OPCIONES
             </h3>
 
+            <div className="w-[100%] border-b-2 p-[19px]">
+              <Link
+                href=""
+                className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
+              >
+                <FaDiceSix />
+                Usuarios
+              </Link>
+            </div>
             <div className="w-[100%] border-b-2 p-[19px]">
               <Link
                 href=""

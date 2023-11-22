@@ -63,8 +63,8 @@ const ProductForm = () => {
           />
         </div>
         <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-5">
-          <SelectedComponent title="Marca" classStyle="mb-4 sm:mb-0" />
-          <SelectedComponent title="Categoria" />
+          <SelectedComponent title="Marca" classStyle="mb-4 sm:mb-0 sm:w-[50%]" />
+          <SelectedComponent title="Categoria" classStyle="sm:w-[50%]"/>
         </div>
         <h2 className="mt-5 text-sm sm:text-lg text-[#ff7f51] font-semibold">
           TALLAS:
