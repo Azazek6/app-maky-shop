@@ -104,7 +104,7 @@ const SideBarContent = ({ children }) => {
             />
             <p className="text-xs text-[#606879]">ADMINISTRADOR</p>
             <Link
-              href="/"
+              href="/admin"
               className="text-sm text-[#FF5151] hover:opacity-70 hover:text-[#606879] transition-all duration-300 ease-in-out"
             >
               Cerrar sesi&oacute;n
