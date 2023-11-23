@@ -62,7 +62,7 @@ const NavegationTop = () => {
             <HiOutlineUser />
           </Link>
           <Link
-            href="/admin/signin"
+            href="/admin"
             target="_blank"
             title="Dashboard"
             className="hover:text-[#FF5151] hover:font-bold text-2xl"

@@ -92,7 +92,7 @@ const Home = () => {
       </div>
       {/* TABLA DE DATOS */}
       <div className="w-[100%] mt-8">
-        <TableGeneral title={title} data={userList} section="/brand/edit/1" />
+        <TableGeneral title={title} data={userList} section="/user/edit/1" />
       </div>
     </Layout>
   );

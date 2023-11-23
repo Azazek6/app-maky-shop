@@ -38,6 +38,7 @@ const Brand = () => {
   const router = useRouter();
   return (
     <Layout>
+      <h2 className="text-2xl text-[#ff7f51] font-bold">LISTA DE MARCAS</h2>
       <div className="w-[100%] flex items-center justify-between mt-5">
         <div className="relative w-[100%]">
           <div className="flex items-center">
