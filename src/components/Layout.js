@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import NProgress from "nprogress";
+import { Toaster } from "sonner";
 import { useGlobal } from "@/context/GlobalProvider";
 import NavegationTop from "./Navegation/NavegationTop";
 import SignIn from "./UserAccess/SignIn";
 import Footer from "./Footer";
 
 const Layout = ({ title, children }) => {
-  const { actionBar, showCredentials } = useGlobal();
+  const { tokenPanel, actionBar, showCredentials } = useGlobal();
 
   const router = useRouter();
 
@@ -30,6 +31,7 @@ const Layout = ({ title, children }) => {
         <title>MAKYS {title}</title>
       </Head>
       <NavegationTop />
+      <Toaster theme="light" position="top-right" duration={2000} />
       <main
         className={`w-[100%] px-6 py-2 ${
           !actionBar ? "mt-24" : "mt-[300px]"
@@ -41,7 +43,7 @@ const Layout = ({ title, children }) => {
       <Footer />
 
       {/* CREDENCIALES */}
-      {showCredentials && (<SignIn />)} 
+      {showCredentials && <SignIn />}
 
       {/* FIN CREDENCIALES */}
     </>

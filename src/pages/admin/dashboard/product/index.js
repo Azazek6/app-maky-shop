@@ -1,71 +1,93 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { HiMagnifyingGlass, HiMiniPlusCircle } from "react-icons/hi2";
 import Layout from "@/components/Admin/Layout";
 import CardProduct from "@/components/Admin/Card/CardProduct";
 import SelectedComponent from "@/components/Admin/SelectedComponent";
+import { useGlobal } from "@/context/GlobalProvider";
 
-const productList = [
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
-  {
-    codigo: "SCR324G5",
-    nombre: "polo",
-    descripcion: "sadasdasd",
-    tallas: "S - M - L - XL",
-    estado: "Activo",
-  },
+const listSizes = [
+  { id: "S", nombre: "S" },
+  { id: "M", nombre: "M" },
+  { id: "L", nombre: "L" },
+  { id: "XL", nombre: "XL" },
 ];
 
 const Product = () => {
+  const { product, brand, category, fetchBrand, fetchCategory, fetchProduct } =
+    useGlobal();
+
   const router = useRouter();
+  const [disableSelect, setDisableSelect] = useState(false);
+  const [filteredProduct, setFilteredProduct] = useState([]);
+  const [filter, setFilter] = useState({
+    category: "",
+    brand: "",
+    size: "",
+    name: "",
+  });
+
+  const handleSearchSelect = () => {
+    if (filter.category === "" && filter.brand === "" && filter.size === "") {
+      setFilteredProduct(product);
+      return;
+    }
+
+    let filteredResult = product;
+
+    if (filter.category !== "") {
+      filteredResult = filteredResult.filter(
+        (itemFilter) => itemFilter.categoria.id_categoria == filter.category
+      );
+    }
+
+    if (filter.brand !== "") {
+      filteredResult = filteredResult.filter(
+        (itemFilter) => itemFilter.marca.id_marca == filter.brand
+      );
+    }
+
+    if (filter.size !== "") {
+      filteredResult = filteredResult.filter((itemFilter) =>
+        itemFilter.producto_tallas.some((talla) => talla.talla === filter.size)
+      );
+    }
+
+    setFilteredProduct(filteredResult);
+  };
+
+  const handleChangeSelect = ({ target: { name, value } }) => {
+    setFilter({ ...filter, [name]: value });
+  };
+
+  useEffect(() => {
+    fetchBrand();
+    fetchCategory();
+    fetchProduct();
+  }, []);
+
+  useEffect(() => {
+    setFilteredProduct(product);
+  }, [product]);
+
+  useEffect(() => {
+    handleSearchSelect();
+  }, [filter.category, filter.brand, filter.size]);
+
+  useEffect(() => {
+    if (filter.name == "") {
+      setDisableSelect(false);
+      return;
+    }
+    setDisableSelect(true);
+
+    setFilteredProduct(
+      product.filter((itemFilter) =>
+        itemFilter.nombre.toUpperCase().includes(filter.name.toUpperCase())
+      )
+    );
+  }, [filter.name]);
+
   return (
     <Layout>
       <h2 className="text-2xl text-[#ff7f51] font-bold">MIS PRODUCTOS</h2>
@@ -82,20 +104,44 @@ const Product = () => {
       </div>
       <div className="w-[100%] flex items-center justify-center mt-5 gap-10">
         <div className="w-[100%] ">
-          <SelectedComponent title="Categoria" />
+          <SelectedComponent
+            data={category.filter((itemFilter) => itemFilter.estado == 1)}
+            name="category"
+            handleChange={handleChangeSelect}
+            value={filter.category}
+            status={disableSelect}
+            title="Categoria"
+          />
         </div>
         <div className="w-[100%]">
-          <SelectedComponent title="Marca" />
+          <SelectedComponent
+            data={brand.filter((itemFilter) => itemFilter.estado == 1)}
+            name="brand"
+            status={disableSelect}
+            handleChange={handleChangeSelect}
+            value={filter.brand}
+            title="Marca"
+          />
         </div>
       </div>
       <div className="w-[100%] flex items-center mt-5 gap-10">
         <div className=" w-[100%]">
-          <SelectedComponent title="Tallas" />
+          <SelectedComponent
+            data={listSizes}
+            name="size"
+            handleChange={handleChangeSelect}
+            value={filter.size}
+            status={disableSelect}
+            title="Tallas"
+          />
         </div>
         <div className="relative w-[100%]">
           <div className="flex items-center justify-center">
             <input
               type="text"
+              name="name"
+              value={filter.name}
+              onChange={handleChangeSelect}
               placeholder="Ingrese nombre a buscar"
               className="w-[100%] mt-[3px] text-sm outline-none border border-[#cfcecf] p-2 placeholder:text-[#979fa9] placeholder:text-xs rounded-md shadow focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out"
             />
@@ -108,7 +154,7 @@ const Product = () => {
 
       {/* TABLA DE DATOS */}
       <div className="w-[100%] mt-8">
-        <CardProduct data={productList} section="/brand/edit/1" />
+        <CardProduct data={filteredProduct} />
       </div>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   HiMiniBars3,
@@ -6,13 +6,17 @@ import {
   HiOutlineMagnifyingGlass,
   HiOutlineUser,
   HiOutlineBell,
-  HiOutlineWrenchScrewdriver
+  HiOutlineWrenchScrewdriver,
 } from "react-icons/hi2";
 import { useGlobal } from "../../context/GlobalProvider";
 
 const NavegationTop = () => {
-  const { actionBar, handleClickShowActionBar, handleClickShowCredential } =
-    useGlobal();
+  const {
+    userData,
+    actionBar,
+    handleClickShowActionBar,
+    handleClickShowCredential,
+  } = useGlobal();
 
   return (
     <>
@@ -54,21 +58,27 @@ const NavegationTop = () => {
           >
             <HiOutlineMagnifyingGlass />
           </Link>
-          <Link
-            href="/"
-            onClick={handleClickShowCredential}
-            className="hover:text-[#FF5151] hover:font-bold text-2xl"
-          >
-            <HiOutlineUser />
-          </Link>
-          <Link
-            href="/admin"
-            target="_blank"
-            title="Dashboard"
-            className="hover:text-[#FF5151] hover:font-bold text-2xl"
-          >
-            <HiOutlineWrenchScrewdriver />
-          </Link>
+          {!userData && (
+            <Link
+              href="/"
+              onClick={handleClickShowCredential}
+              className="hover:text-[#FF5151] hover:font-bold text-2xl"
+            >
+              <HiOutlineUser />
+            </Link>
+          )}
+
+          {userData && (
+            <Link
+              href="/admin"
+              target="_blank"
+              title="Dashboard"
+              className="hover:text-[#FF5151] hover:font-bold text-2xl"
+            >
+              <HiOutlineWrenchScrewdriver />
+            </Link>
+          )}
+
           <Link
             href=""
             className="hover:text-[#FF5151] hover:font-bold text-2xl"
@@ -119,7 +129,7 @@ const NavegationTop = () => {
           </Link>
         </div>
         <div className="w-[100%] mt-2">
-        <Link
+          <Link
             href="/admin/signin"
             target="_blank"
             title="Dashboard"

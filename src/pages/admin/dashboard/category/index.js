@@ -1,27 +1,9 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { HiMagnifyingGlass, HiMiniPlusCircle } from "react-icons/hi2";
 import Layout from "@/components/Admin/Layout";
 import TableGeneral from "@/components/Admin/Table/TableGeneral";
-
-const categoryList = [
-  {
-    nombre: "SCR324G5",
-    estado: "Activo",
-  },
-  {
-    nombre: "SCR324G5",
-    estado: "Activo",
-  },
-  {
-    nombre: "SCR324G5",
-    estado: "Activo",
-  },
-  {
-    nombre: "SCR324G5",
-    estado: "Activo",
-  },
-];
+import { useGlobal } from "@/context/GlobalProvider";
 
 const title = [
   {
@@ -35,7 +17,27 @@ const title = [
 ];
 
 const Category = () => {
+  const { category, fetchCategory } = useGlobal();
+
   const router = useRouter();
+  const [filteredCategory, setFilteredCategory] = useState([]);
+
+  const handleChangleFilterData = ({ target: { name, value } }) => {
+    setFilteredCategory(
+      category.filter((itemFilter) =>
+        itemFilter.nombre.includes(value.toUpperCase())
+      )
+    );
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+  
+  useEffect(() => {
+    setFilteredCategory(category);
+  }, [category]);
+  
   return (
     <Layout>
       <h2 className="text-2xl text-[#ff7f51] font-bold">LISTA DE CATEGORIAS</h2>
@@ -44,6 +46,7 @@ const Category = () => {
           <div className="flex items-center">
             <input
               type="text"
+              onChange={handleChangleFilterData}
               placeholder="Ingrese nombre a buscar"
               className="w-[80%] mt-[3px] text-sm outline-none border border-[#cfcecf] p-2 placeholder:text-[#979fa9] placeholder:text-xs rounded-md shadow focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out"
             />
@@ -68,8 +71,8 @@ const Category = () => {
       <div className="w-[100%] mt-8">
         <TableGeneral
           title={title}
-          data={categoryList}
-          section="/category/edit/1"
+          data={filteredCategory}
+          section="category"
         />
       </div>
     </Layout>

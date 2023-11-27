@@ -1,11 +1,20 @@
 import { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { Toaster } from "sonner";
 import NProgress from "nprogress";
 import SideBarContent from "./Navegation/SideBarContent";
 
 const Layout = ({ children, title }) => {
   const router = useRouter();
+
+  useEffect(() => {
+    const tokenPanel = localStorage.getItem("tokenMakyPanel");
+
+    if (!tokenPanel) {
+      router.push("/admin");
+    }
+  }, []);
 
   //Barra de carga
   useEffect(() => {
@@ -24,6 +33,7 @@ const Layout = ({ children, title }) => {
       <Head>
         <title>{title} Administracion</title>
       </Head>
+      <Toaster theme="light" position="top-right" duration={2000} />
       <SideBarContent>{children}</SideBarContent>
     </>
   );

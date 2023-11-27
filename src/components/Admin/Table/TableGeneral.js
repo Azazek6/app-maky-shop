@@ -4,7 +4,7 @@ import ReactPaginate from "react-paginate";
 import { HiOutlinePencilSquare, HiOutlineTrash } from "react-icons/hi2";
 import { useGlobal } from "@/context/GlobalProvider";
 
-const TableGeneral = ({ section, tag, title, data, pageSize = 5 }) => {
+const TableGeneral = ({ section, title, data, pageSize = 5 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const pageCount = Math.ceil(data.length / pageSize);
 
@@ -57,12 +57,17 @@ const TableGeneral = ({ section, tag, title, data, pageSize = 5 }) => {
               {currentData?.map((datas, index) => {
                 const globalIndex = currentPage * pageSize + index + 1;
                 return (
-                  <tr key={datas.id}>
+                  <tr key={index}>
                     <td className="px-6 py-4 text-xs text-[#34495E] whitespace-nowrap sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-base xl:text-xs">
                       {globalIndex}
                     </td>
                     {title?.map((item) => {
-                      const value = datas[item.id];
+                      const value =
+                        datas[item.id] == 1
+                          ? "Activado"
+                          : datas[item.id] == 0
+                          ? "Desactivado"
+                          : datas[item.id];
                       return (
                         <td
                           key={item.id}
@@ -75,7 +80,7 @@ const TableGeneral = ({ section, tag, title, data, pageSize = 5 }) => {
                     <td className="px-6 py-4 text-xs whitespace-nowrap sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-base xl:text-xs">
                       <Link
                         className="text-green-500 hover:text-green-700"
-                        href={`/admin/dashboard/${section}`}
+                        href={`/admin/dashboard/${section}/edit/${datas.id}`}
                       >
                         <HiOutlinePencilSquare className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
                       </Link>

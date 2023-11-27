@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import {
   FaBars,
@@ -11,7 +12,16 @@ import {
 } from "react-icons/fa6";
 
 const SideBarContent = ({ children }) => {
+  const router = useRouter();
+
   const [toogleSideBar, setToogleSideBar] = useState(true);
+
+  const signOut = () => {
+    localStorage.removeItem("tokenMakyPanel");
+    setTimeout(() => {
+      router.push("/admin");
+    }, 500);
+  };
 
   return (
     <div className="w-[100%] flex h-screen bg-[#efeff7] overflow-hidden">
@@ -114,7 +124,8 @@ const SideBarContent = ({ children }) => {
             />
             <p className="text-xs text-[#606879]">ADMINISTRADOR</p>
             <Link
-              href="/admin"
+              href="#"
+              onClick={signOut}
               className="text-sm text-[#FF5151] hover:opacity-70 hover:text-[#606879] transition-all duration-300 ease-in-out"
             >
               Cerrar sesi&oacute;n

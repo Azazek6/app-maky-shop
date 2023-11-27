@@ -1,46 +1,14 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { HiMagnifyingGlass, HiMiniPlusCircle } from "react-icons/hi2";
 import Layout from "@/components/Admin/Layout";
 import TableGeneral from "@/components/Admin/Table/TableGeneral";
+import SelectedComponent from "@/components/Admin/SelectedComponent";
+import { useGlobal } from "@/context/GlobalProvider";
 
-const userList = [
-  {
-    apellido: "SCR324G5",
-    nombres: "SCR324G5",
-    documento: "70991065",
-    usuario: "70991065",
-    email: "asad@gmail.com",
-    telefono: "968703924",
-    estado: "Activo",
-  },
-  {
-    apellido: "SCR324G5",
-    nombres: "SCR324G5",
-    documento: "45124578",
-    usuario: "45124578",
-    email: "asad@gmail.com",
-    telefono: "968703924",
-    estado: "Activo",
-  },
-  {
-    apellido: "SCR324G5",
-    nombres: "SCR324G5",
-    documento: "63236515",
-    usuario: "63236515",
-    email: "asad@gmail.com",
-    telefono: "968703924",
-    estado: "Activo",
-  },
-  {
-    apellido: "SCR324G5",
-    nombres: "SCR324G5",
-    documento: "48756485",
-    usuario: "48756485",
-    email: "asad@gmail.com",
-    telefono: "968703924",
-    estado: "Activo",
-  },
+const dataFilter = [
+  { id: "1", nombre: "CLIENTES" },
+  { id: "2", nombre: "USUARIOS DEL PANEL" },
 ];
 
 const title = [
@@ -49,7 +17,7 @@ const title = [
     name: "DNI",
   },
   {
-    id: "apellido",
+    id: "apellidos",
     name: "Apellidos",
   },
   {
@@ -75,10 +43,30 @@ const title = [
 ];
 
 const Home = () => {
+  const { user, fetchUser } = useGlobal();
   const router = useRouter();
+  const [filteredUser, setFilteredUser] = useState([]);
+
+  const handleChangleFilterData = ({ target: { name, value } }) => {
+    setFilteredUser(user.filter((itemFilter) => itemFilter.id_rol == value));
+  };
+
+  useEffect(() => {
+    fetchUser();
+    setFilteredUser(user);
+  }, []);
+
   return (
     <Layout>
       <h2 className="text-2xl text-[#ff7f51] font-bold">LISTA DE USUARIOS</h2>
+      <div className="w-[100%] p-3 mt-4">
+        <SelectedComponent
+          data={dataFilter}
+          handleChange={handleChangleFilterData}
+          title="----------- Filtro -----------"
+        />
+      </div>
+
       <div className="w-[100%] flex justify-end mt-5 mb-3">
         <button
           onClick={() => {
@@ -92,7 +80,7 @@ const Home = () => {
       </div>
       {/* TABLA DE DATOS */}
       <div className="w-[100%] mt-8">
-        <TableGeneral title={title} data={userList} section="/user/edit/1" />
+        <TableGeneral title={title} data={filteredUser} section="user" />
       </div>
     </Layout>
   );
