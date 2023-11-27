@@ -57,7 +57,8 @@ export const GlobalContextProvider = ({ children }) => {
 
   // ------------------ Marcas
   const createBrand = async (brand) => {
-    return await axios.post(`${host}/marcas/${tokenPanel}`, brand);
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.post(`${host}/marcas/${token}`, brand);
   };
 
   const fetchBrand = async () => {
@@ -72,7 +73,8 @@ export const GlobalContextProvider = ({ children }) => {
 
   // ------------------ Categorias
   const createCategory = async (category) => {
-    return await axios.post(`${host}/categorias/${tokenPanel}`, category);
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.post(`${host}/categorias/${token}`, category);
   };
 
   const fetchCategory = async () => {
@@ -87,7 +89,8 @@ export const GlobalContextProvider = ({ children }) => {
 
   // ------------------ Productos
   const createProduct = async (product) => {
-    return await axios.post(`${host}/productos/${tokenPanel}`, product);
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.post(`${host}/productos/${token}`, product);
   };
 
   const fetchProduct = async () => {
