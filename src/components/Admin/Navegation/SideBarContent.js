@@ -10,8 +10,10 @@ import {
   FaDiceFive,
   FaDiceSix,
 } from "react-icons/fa6";
+import { useGlobal } from "@/context/GlobalProvider";
 
 const SideBarContent = ({ children }) => {
+  const {userDataPanel} = useGlobal()
   const router = useRouter();
 
   const [toogleSideBar, setToogleSideBar] = useState(true);
@@ -43,7 +45,7 @@ const SideBarContent = ({ children }) => {
         {toogleSideBar && (
           <>
             <h2 className="mt-3 text-center text-xs text-[#606879]">
-              Todo el nombre del usuario
+              {userDataPanel?.nombres} {userDataPanel?.apellidos}
             </h2>
 
             <h3 className="mt-5 p-5 text-sm font-bold text-[#FF5151]">
