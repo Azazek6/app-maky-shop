@@ -64,7 +64,7 @@ export const GlobalContextProvider = ({ children }) => {
   const fetchBrand = async () => {
     const token = localStorage.getItem("tokenMakyPanel");
     try {
-      const { data } = await axios.get(`${host}/marcas/${token}`);
+      const { data } = await axios.get(`${host}/marcas`);
       setBrand(data);
     } catch (error) {
       console.log(error);
@@ -80,7 +80,7 @@ export const GlobalContextProvider = ({ children }) => {
   const fetchCategory = async () => {
     const token = localStorage.getItem("tokenMakyPanel");
     try {
-      const { data } = await axios.get(`${host}/categorias/${token}`);
+      const { data } = await axios.get(`${host}/categorias`);
       setCategory(data);
     } catch (error) {
       console.error(error);
@@ -96,7 +96,7 @@ export const GlobalContextProvider = ({ children }) => {
   const fetchProduct = async () => {
     const token = localStorage.getItem("tokenMakyPanel");
     try {
-      const { data } = await axios.get(`${host}/productos/${token}`);
+      const { data } = await axios.get(`${host}/productos`);
       setProduct(data);
     } catch (error) {
       console.log(error);
@@ -105,7 +105,7 @@ export const GlobalContextProvider = ({ children }) => {
 
   const fetchProductForId = async (id) => {
     const token = localStorage.getItem("tokenMakyPanel");
-    return await axios.get(`${host}/productos/${token}/${id}`);
+    return await axios.get(`${host}/productos/${token}/find/${id}`);
   };
 
   //Credenciales
