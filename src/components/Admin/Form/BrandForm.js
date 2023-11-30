@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import InputComponent from "../InputComponent";
 import CheckComponent from "../CheckComponent";
 import { toastMessage } from "@/helpers/general";
 import { useGlobal } from "@/context/GlobalProvider";
 
 const BrandForm = () => {
-  const { createBrand } = useGlobal();
+  const { fetchBrandForId, createBrand, updateBrand } = useGlobal();
+
+  const router = useRouter();
   //Estados
   const [isChecked, setIsChecked] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -41,12 +44,16 @@ const BrandForm = () => {
     }
 
     try {
-      brandForm.status = isChecked
-      const { status, data } = await createBrand(brandForm);
+      brandForm.status = isChecked;
+      const { status, data } = router.query?.id
+        ? await updateBrand(router.query.id, brandForm)
+        : await createBrand(brandForm);
 
       if (status == 201) {
         setLoading(false);
-        clear();
+        if (!router.query.id) {
+          clear();
+        }
         toastMessage(data.message, 1);
       }
     } catch (error) {
@@ -54,6 +61,29 @@ const BrandForm = () => {
       toastMessage(error.response.data.message, 3);
     }
   };
+
+  useEffect(() => {
+    const loadBrand = async (id) => {
+      try {
+        const { data } = await fetchBrandForId(id);
+        setBrandForm({
+          name: data.nombre,
+          status: data.estado,
+        });
+        setIsChecked(data.estado == 1 ? true : false);
+      } catch (error) {
+        setBrandForm({
+          name: "",
+          status: isChecked,
+        });
+        setIsChecked(true);
+      }
+    };
+
+    if (router.query?.id) {
+      loadBrand(router.query.id);
+    }
+  }, [router.query.id]);
 
   return (
     <div className="flex-row">
@@ -79,7 +109,7 @@ const BrandForm = () => {
             disabled={loading}
             className="bg-[#ff5151] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out"
           >
-            Registrar
+            {router.query?.id ? "Modificar" : "Registrar"}
           </button>
         </div>
       </form>

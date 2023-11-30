@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import {
   IoLogoFacebook,
@@ -8,8 +8,16 @@ import {
   IoMail,
   IoCall,
 } from "react-icons/io5";
+import { useGlobal } from "@/context/GlobalProvider";
 
 const Footer = () => {
+  const { category, brand, fetchCategory, fetchBrand } = useGlobal();
+
+  useEffect(() => {
+    fetchCategory();
+    fetchBrand();
+  }, []);
+
   return (
     <footer className="mt-12 text-center sm:text-left bg-[#FCCB90] bg-opacity-40 px-20 py-10 grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-12">
       <div className="w-[100%] ">
@@ -53,44 +61,30 @@ const Footer = () => {
         </p>
         <p className="mt-3 text-xs text-[#FF5E3A]">@makys</p>
       </div>
-      <div className="w-[100%]">
-        <h2 className="font-bold">Producto</h2> <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
-        <br />
-        <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
-        <br />
-        <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
-        <br />
-        <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
-      </div>
+
       <div className="w-[100%]">
         <h2 className="font-bold">Categoria</h2> <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>{" "}
-        <br /> <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
-        <br /> <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
-        <br /> <br />
-        <Link href="" className="text-sm">
-          Precio
-        </Link>
+        {category &&
+          category.slice(0, 4).map((itemCategory) => (
+            <>
+              <Link key={itemCategory.id} href={`/category/${itemCategory.nombre}`} className="text-sm">
+                {itemCategory.nombre}
+              </Link>{" "}
+              <br /> <br />
+            </>
+          ))}
+      </div>
+      <div className="w-[100%]">
+        <h2 className="font-bold">Marca</h2> <br />
+        {brand &&
+          brand.slice(0, 4).map((itemBrand) => (
+            <>
+              <Link key={itemBrand.id} href={`/brand/${itemBrand.nombre}`} className="text-sm">
+                {itemBrand.nombre}
+              </Link>{" "}
+              <br /> <br />
+            </>
+          ))}
       </div>
       <div className="w-[100%]">
         <h2 className="font-bold">Cuenta</h2> <br />

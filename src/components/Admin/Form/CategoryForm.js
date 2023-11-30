@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import InputComponent from "../InputComponent";
 import CheckComponent from "../CheckComponent";
 import { toastMessage } from "@/helpers/general";
 import { useGlobal } from "@/context/GlobalProvider";
 
 const CategoryForm = () => {
-  const { createCategory } = useGlobal();
+  const { fetchCategoryForId, createCategory, updateCategory } = useGlobal();
+  const router = useRouter();
 
   //Estados
   const [isChecked, setIsChecked] = useState(true);
@@ -43,11 +45,15 @@ const CategoryForm = () => {
 
     try {
       categoryForm.status = isChecked;
-      const { status, data } = await createCategory(categoryForm);
+      const { status, data } = router.query.id
+        ? await updateCategory(router.query.id, categoryForm)
+        : await createCategory(categoryForm);
 
       if (status == 201) {
         setLoading(false);
-        clear();
+        if (!router.query.id) {
+          clear();
+        }
         toastMessage(data.message, 1);
       }
     } catch (error) {
@@ -55,6 +61,29 @@ const CategoryForm = () => {
       toastMessage(error.response.data.message, 3);
     }
   };
+
+  useEffect(() => {
+    const loadCategory = async (id) => {
+      try {
+        const { data } = await fetchCategoryForId(id);
+        setCategoryForm({
+          name: data.nombre,
+          status: data.estado,
+        });
+        setIsChecked(data.estado == 1 ? true : false);
+      } catch (error) {
+        setCategoryForm({
+          name: "",
+          status: isChecked,
+        });
+        setIsChecked(true);
+      }
+    };
+
+    if (router.query?.id) {
+      loadCategory(router.query.id);
+    }
+  }, [router.query.id]);
 
   return (
     <div className="flex-row">
@@ -80,7 +109,7 @@ const CategoryForm = () => {
             disabled={loading}
             className="bg-[#ff5151] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out"
           >
-            Registrar
+            {router.query?.id ? "Modificar" : "Registrar"}
           </button>
         </div>
       </form>

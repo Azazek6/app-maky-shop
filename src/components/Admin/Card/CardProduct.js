@@ -81,7 +81,7 @@ const CardGeneral = ({ data, pageSize = 6 }) => {
                   className="text-xl cursor-pointer text-[#4878c5] hover:opacity-70 transition-all duration-300 ease-in-out"
                   title="Mas detalles"
                   onClick={() => {
-                    setSelectIdProduct(datas.id_producto);
+                    setSelectIdProduct(datas.id);
                     handleClickDetail();
                   }}
                 />

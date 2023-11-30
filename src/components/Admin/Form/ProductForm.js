@@ -6,6 +6,8 @@ import SelectedComponent from "../SelectedComponent";
 import CheckComponent from "../CheckComponent";
 import { toastMessage } from "@/helpers/general";
 import { useGlobal } from "@/context/GlobalProvider";
+import genders from "@/sample/genders.json";
+import stages from "@/sample/stages.json";
 
 const ProductForm = () => {
   const { createProduct, brand, category, fetchBrand, fetchCategory } =
@@ -24,8 +26,11 @@ const ProductForm = () => {
     stock: "",
     id_brand: "",
     id_category: "",
+    size: [],
     image: "",
     description: "",
+    id_gender: "",
+    id_stage: "",
   });
 
   const clear = () => {
@@ -33,11 +38,14 @@ const ProductForm = () => {
       code: "",
       name: "",
       price: "",
+      stock: "",
       id_brand: "",
       id_category: "",
       size: [],
       image: "",
       description: "",
+      id_gender: "",
+      id_stage: "",
     });
   };
 
@@ -83,6 +91,8 @@ const ProductForm = () => {
       productData.stock == "" ||
       productData.id_brand == "" ||
       productData.id_category == "" ||
+      productData.id_gender == "" ||
+      productData.id_stage == "" ||
       productData.description == ""
     ) {
       setLoading(false);
@@ -162,7 +172,24 @@ const ProductForm = () => {
             handleChange={handleChange}
           />
         </div>
-        <h2 className="mt-5 text-sm sm:text-lg text-[#ff7f51] font-semibold">
+        <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-5">
+          <SelectedComponent
+            data={genders}
+            title="Género"
+            name="id_gender"
+            value={productData.id_gender}
+            handleChange={handleChange}
+            classStyle="mb-4 sm:mb-0"
+          />
+          <SelectedComponent
+            data={stages}
+            title="Etapa"
+            name="id_stage"
+            value={productData.id_stage}
+            handleChange={handleChange}
+          />
+        </div>
+        <h2 className="mt-5 mb-3 text-sm sm:text-lg text-[#ff7f51] font-semibold">
           TALLAS:
         </h2>
         <div className="flex items-center justify-center">
@@ -188,14 +215,14 @@ const ProductForm = () => {
           />
         </div>
         <div className="mt-8 relative flex-row lg:flex items-center">
-          <InputFileComponent
+          {/* <InputFileComponent
             file={selectedFile}
             handleChange={handleFileChange}
-          />
+          /> */}
         </div>
         <div className="mt-5">
           <TextComponent
-            title="Descripción del producto (OPCIONAL)"
+            title="Descripción del producto"
             name="description"
             value={productData.description}
             handleChange={handleChange}

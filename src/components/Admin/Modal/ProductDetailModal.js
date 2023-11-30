@@ -13,12 +13,20 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
   const getMoreDetail = () => {
     return (
       <>
-        <div className="w-[100%] flex-row sm:flex items-center gap-4">
+        <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
           <h2 className="font-bold text-[#ff7751] text-sm sm:text-base">
-            CANTIDAD:
+            Para:
           </h2>
-          <p className="font-semibold text-green-800 text-xs sm:text-sm mt-3 sm:mt-0">
-            {productId.cantidad}
+          <p className="font-semibold text-xs sm:text-sm mt-3 sm:mt-0">
+            {productId.etapa?.nombre}
+          </p>
+        </div>
+        <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
+          <h2 className="font-bold text-[#ff7751] text-sm sm:text-base">
+            Genero:
+          </h2>
+          <p className="font-semibold text-xs sm:text-sm mt-3 sm:mt-0">
+            {productId.genero?.nombre}
           </p>
         </div>
         <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
@@ -94,11 +102,25 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                     </div> */}
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <h2 className="text-lg sm:text-3xl font-bold">
-                        {productId.nombre}
+                        {productId?.nombre}
                       </h2>
-                      <p className="text-sm sm:text-xl mt-4">
-                        S/. {productId.precio}
-                      </p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm sm:text-base mt-4">
+                          Stock:{" "}
+                          <span
+                            className={`${
+                              productId?.cantidad >= 5
+                                ? "text-green-900"
+                                : "text-red-900"
+                            } font-bold`}
+                          >
+                            {productId?.cantidad}
+                          </span>
+                        </p>
+                        <p className="text-sm sm:text-xl mt-4">
+                          S/. {productId?.precio}
+                        </p>
+                      </div>
                       <div className="flex items-center justify-center sm:justify-normal gap-2 mt-4">
                         <HiMiniStar
                           className={`text-[14px] sm:text-[16px] text-[#FF5E3A]`}
@@ -114,7 +136,7 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                         />
                       </div>
                       <p className="mt-4 text-sm sm:text-base text-[#4F5665]">
-                        {productId.descripcion}
+                        {productId?.descripcion}
                       </p>
                       {/* SELECCION DE COLORES */}
                       <h3 className="mt-5 text-[#636c7d] text-sm font-bold">
@@ -136,7 +158,7 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                         Tallas:
                       </h3>
                       <div className="w-[100%] grid grid-cols-4 mt-3">
-                        {productId.producto_tallas?.map((itemSize) => (
+                        {productId?.producto_tallas?.map((itemSize) => (
                           <span
                             key={itemSize.talla}
                             className={`w-[100px] text-center py-3 border rounded-md font-bold text-xs sm:text-sm`}
@@ -163,7 +185,7 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                     onClick={() => {
                       setOpen(false);
                       router.push(
-                        `/admin/dashboard/product/edit/${productId.id_producto}`
+                        `/admin/dashboard/product/edit/${productId?.id_producto}`
                       );
                     }}
                     ref={cancelButtonRef}

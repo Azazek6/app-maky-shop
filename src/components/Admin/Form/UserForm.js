@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import InputComponent from "../InputComponent";
 import CheckComponent from "../CheckComponent";
 import { toastMessage } from "@/helpers/general";
 import { useGlobal } from "@/context/GlobalProvider";
 
 const UserFrom = () => {
-  const { singUp } = useGlobal();
+  const { singUp, UpdateUser, fetchUserForId } = useGlobal();
+  const router = useRouter();
 
   const [isChecked, setIsChecked] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -50,11 +52,15 @@ const UserFrom = () => {
     try {
       userForm.status = isChecked;
       userForm.username = userForm.document;
-      const { status, data } = await singUp(userForm);
+      const { status, data } = router.query?.id
+        ? await UpdateUser(router.query.id, userForm)
+        : await singUp(userForm);
 
       if (status == 201) {
         setLoading(false);
-        clear();
+        if (!router.query.id) {
+          clear();
+        }
         toastMessage(data.message, 1);
       }
     } catch (error) {
@@ -62,6 +68,33 @@ const UserFrom = () => {
       toastMessage(error.response.data.message, 3);
     }
   };
+
+  useEffect(() => {
+    const loadData = async (id) => {
+      try {
+        const { data } = await fetchUserForId(id);
+        setUserForm({
+          document: data.documento,
+          names: data.nombres,
+          lastnames: data.apellidos,
+          username: data.usuario,
+          email: data.email,
+          phone: data.telefono,
+          password: data.password,
+          id_rol: data.id_rol,
+          status: data.estado,
+        });
+        setIsChecked(data.estado == 1 ? true : false);
+      } catch (error) {
+        clear();
+        setIsChecked(true);
+      }
+    };
+
+    if (router.query?.id) {
+      loadData(router.query.id);
+    }
+  }, [router.query.id]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -127,20 +160,22 @@ const UserFrom = () => {
           readonly
           placeholder="Usuario"
         />
-        <InputComponent
-          name="password"
-          value={userForm.password}
-          onChange={handleChange}
-          placeholder="Contraseña"
-          classStyle="mt-4 sm:mt-0"
-        />
+        {!router.query.id && (
+          <InputComponent
+            name="password"
+            value={userForm.password}
+            onChange={handleChange}
+            placeholder="Contraseña"
+            classStyle="mt-4 sm:mt-0"
+          />
+        )}
       </div>
       <div className="w-[100%] sm:text-right mt-10">
         <button
           disabled={loading}
           className="bg-[#ff5151] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out"
         >
-          Registrar
+          {router.query?.id ? "Modificar" : "Registrar"}
         </button>
       </div>
     </form>

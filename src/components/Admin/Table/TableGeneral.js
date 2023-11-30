@@ -78,12 +78,25 @@ const TableGeneral = ({ section, title, data, pageSize = 5 }) => {
                       );
                     })}
                     <td className="px-6 py-4 text-xs whitespace-nowrap sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-base xl:text-xs">
-                      <Link
-                        className="text-green-500 hover:text-green-700"
-                        href={`/admin/dashboard/${section}/edit/${datas.id}`}
-                      >
-                        <HiOutlinePencilSquare className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
-                      </Link>
+                      {datas.role?.nombre == "USUARIO_PANEL" ? (
+                        <Link
+                          className="text-green-500 hover:text-green-700"
+                          href={`/admin/dashboard/${section}/edit/${datas.id}`}
+                        >
+                          <HiOutlinePencilSquare className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
+                        </Link>
+                      ) : (
+                        ""
+                      )}
+
+                      {!datas.role && (
+                        <Link
+                          className="text-green-500 hover:text-green-700"
+                          href={`/admin/dashboard/${section}/edit/${datas.id}`}
+                        >
+                          <HiOutlinePencilSquare className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
+                        </Link>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-xs font-medium text-right whitespace-nowrap sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-base xl:text-xs">
                       <Link
