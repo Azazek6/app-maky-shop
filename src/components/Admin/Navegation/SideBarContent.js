@@ -10,11 +10,8 @@ import {
   FaDiceFive,
   FaDiceSix,
 } from "react-icons/fa6";
-<<<<<<< HEAD
 import { useGlobal } from "@/context/GlobalProvider";
-=======
 import jwt_decode from "jwt-decode";
->>>>>>> v.1
 
 const SideBarContent = ({ children }) => {
   const {userDataPanel} = useGlobal()
@@ -59,11 +56,7 @@ const SideBarContent = ({ children }) => {
         {toogleSideBar && (
           <>
             <h2 className="mt-3 text-center text-xs text-[#606879]">
-<<<<<<< HEAD
-              {userDataPanel?.nombres} {userDataPanel?.apellidos}
-=======
               {userData?.apellidos} {userData?.nombres}
->>>>>>> v.1
             </h2>
 
             <h3 className="mt-5 p-5 text-sm font-bold text-[#FF5151]">
