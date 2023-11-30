@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
@@ -10,12 +10,17 @@ import {
   FaDiceFive,
   FaDiceSix,
 } from "react-icons/fa6";
+<<<<<<< HEAD
 import { useGlobal } from "@/context/GlobalProvider";
+=======
+import jwt_decode from "jwt-decode";
+>>>>>>> v.1
 
 const SideBarContent = ({ children }) => {
   const {userDataPanel} = useGlobal()
   const router = useRouter();
 
+  const [userData, setUserData] = useState(null);
   const [toogleSideBar, setToogleSideBar] = useState(true);
 
   const signOut = () => {
@@ -24,6 +29,15 @@ const SideBarContent = ({ children }) => {
       router.push("/admin");
     }, 500);
   };
+
+  useEffect(() => {
+    const tokenPanel = localStorage.getItem("tokenMakyPanel");
+
+    if (tokenPanel) {
+      const data = jwt_decode(tokenPanel);
+      setUserData(data);
+    }
+  }, []);
 
   return (
     <div className="w-[100%] flex h-screen bg-[#efeff7] overflow-hidden">
@@ -35,7 +49,7 @@ const SideBarContent = ({ children }) => {
       >
         <div className="w-[100%] border-b-2 p-[19px]">
           <Link
-            href=""
+            href="/admin/dashboard"
             className="flex items-center gap-5 hover:text-[#FF5151] font-bold text-base"
           >
             <img src="/logo.jpg" alt="" className="w-[40px] rounded-full" />
@@ -45,7 +59,11 @@ const SideBarContent = ({ children }) => {
         {toogleSideBar && (
           <>
             <h2 className="mt-3 text-center text-xs text-[#606879]">
+<<<<<<< HEAD
               {userDataPanel?.nombres} {userDataPanel?.apellidos}
+=======
+              {userData?.apellidos} {userData?.nombres}
+>>>>>>> v.1
             </h2>
 
             <h3 className="mt-5 p-5 text-sm font-bold text-[#FF5151]">

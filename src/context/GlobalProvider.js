@@ -20,7 +20,6 @@ export const GlobalContextProvider = ({ children }) => {
   const [tokenData, setTokenData] = useState(null);
   const [tokenPanel, setTokenPanel] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [userDataPanel, setUserDataPanel] = useState(null);
   const [user, setUser] = useState([]);
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
@@ -45,6 +44,18 @@ export const GlobalContextProvider = ({ children }) => {
     return await axios.post(`${host}/usuarios`, client);
   };
 
+  const UpdateUser = async (id, client) => {
+    const token = localStorage.getItem("tokenMakyShop");
+    const tokenPanel = localStorage.getItem("tokenMakyPanel");
+    if (token) {
+      return await axios.put(`${host}/usuarios/${token}/${id}`, client);
+    }
+
+    if (tokenPanel) {
+      return await axios.put(`${host}/usuarios/${tokenPanel}/${id}`, client);
+    }
+  };
+
   const fetchUser = async () => {
     const token = localStorage.getItem("tokenMakyPanel");
     try {
@@ -55,14 +66,29 @@ export const GlobalContextProvider = ({ children }) => {
     }
   };
 
+  const fetchUserForId = async (id) => {
+    const token = localStorage.getItem("tokenMakyShop");
+    const tokenPanel = localStorage.getItem("tokenMakyPanel");
+    if (token) {
+      return await axios.get(`${host}/usuarios/${token}/id/${id}`);
+    }
+    if (tokenPanel) {
+      return await axios.get(`${host}/usuarios/${tokenPanel}/id/${id}`);
+    }
+  };
+
   // ------------------ Marcas
   const createBrand = async (brand) => {
     const token = localStorage.getItem("tokenMakyPanel");
     return await axios.post(`${host}/marcas/${token}`, brand);
   };
 
-  const fetchBrand = async () => {
+  const updateBrand = async (id, brand) => {
     const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.put(`${host}/marcas/${token}/id/${id}`, brand);
+  };
+
+  const fetchBrand = async () => {
     try {
       const { data } = await axios.get(`${host}/marcas`);
       setBrand(data);
@@ -71,20 +97,32 @@ export const GlobalContextProvider = ({ children }) => {
     }
   };
 
+  const fetchBrandForId = async (id) => {
+    return await axios.get(`${host}/marcas/${id}`);
+  };
+
   // ------------------ Categorias
   const createCategory = async (category) => {
     const token = localStorage.getItem("tokenMakyPanel");
     return await axios.post(`${host}/categorias/${token}`, category);
   };
 
-  const fetchCategory = async () => {
+  const updateCategory = async (id, category) => {
     const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.put(`${host}/categorias/${token}/id/${id}`, category);
+  };
+
+  const fetchCategory = async () => {
     try {
       const { data } = await axios.get(`${host}/categorias`);
       setCategory(data);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const fetchCategoryForId = async (id) => {
+    return await axios.get(`${host}/categorias/${id}`);
   };
 
   // ------------------ Productos
@@ -94,7 +132,6 @@ export const GlobalContextProvider = ({ children }) => {
   };
 
   const fetchProduct = async () => {
-    const token = localStorage.getItem("tokenMakyPanel");
     try {
       const { data } = await axios.get(`${host}/productos`);
       setProduct(data);
@@ -104,8 +141,7 @@ export const GlobalContextProvider = ({ children }) => {
   };
 
   const fetchProductForId = async (id) => {
-    const token = localStorage.getItem("tokenMakyPanel");
-    return await axios.get(`${host}/productos/${token}/find/${id}`);
+    return await axios.get(`${host}/productos/find/${id}`);
   };
 
   //Credenciales
@@ -122,9 +158,6 @@ export const GlobalContextProvider = ({ children }) => {
 
     if (tokenPanel) {
       setTokenPanel(tokenPanel);
-      const tokenDecoded = jwt_decode(tokenPanel);
-
-      setUserDataPanel(tokenDecoded);
     }
   }, []);
 
@@ -134,7 +167,6 @@ export const GlobalContextProvider = ({ children }) => {
         actionBar,
         tokenPanel,
         userData,
-        userDataPanel,
         signInClient,
         signInPanel,
         user,
@@ -142,11 +174,17 @@ export const GlobalContextProvider = ({ children }) => {
         category,
         product,
         singUp,
+        UpdateUser,
         fetchUser,
+        fetchUserForId,
         createBrand,
+        updateBrand,
         fetchBrand,
+        fetchBrandForId,
         createCategory,
+        updateCategory,
         fetchCategory,
+        fetchCategoryForId,
         createProduct,
         fetchProduct,
         fetchProductForId,

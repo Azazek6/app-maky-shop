@@ -1,18 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { HiMiniHome, HiMiniStar } from "react-icons/hi2";
 import Layout from "@/components/Layout";
 import Accordeon from "@/components/Accordeon";
 import BreadCrumbsData from "@/components/BreadCrumbsData";
+import { useGlobal } from "@/context/GlobalProvider";
 
 const Product = () => {
+  const { fetchProductForId } = useGlobal();
   const router = useRouter();
 
-  const breadcrumbsData = [
-    { url: "/", label: <HiMiniHome /> },
-    { url: "/product", label: "Productos" },
-    { url: "/product/2", label: "Zip Tote Basket" },
-  ];
+  //Estados
+  const [product, setProduct] = useState(null);
 
   // Estado para guardar el color seleccionado
   const [selectedColor, setSelectedColor] = useState("");
@@ -38,6 +37,68 @@ const Product = () => {
   const handleImageSelection = (image) => {
     setSelectedImagePreview(image);
   };
+
+  //Detalles navegacion
+  const breadcrumbsData = [
+    { url: "/", label: <HiMiniHome /> },
+    { url: "/product", label: "Productos" },
+    { url: `/product/${router.query?.id}`, label: product?.nombre },
+  ];
+
+  //Mas detalles
+  const getMoreDetail = () => {
+    return (
+      <>
+        <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
+          <h2 className="font-bold text-[#ff7751] text-sm sm:text-base">
+            Para:
+          </h2>
+          <p className="font-semibold text-xs sm:text-sm mt-3 sm:mt-0">
+            {product?.etapa.nombre}
+          </p>
+        </div>
+        <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
+          <h2 className="font-bold text-[#ff7751] text-sm sm:text-base">
+            Genero:
+          </h2>
+          <p className="font-semibold text-xs sm:text-sm mt-3 sm:mt-0">
+            {product?.genero.nombre}
+          </p>
+        </div>
+        <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
+          <h2 className="font-bold text-[#ff7751] text-sm sm:text-base">
+            CATEGORIA:
+          </h2>
+          <p className="font-semibold text-xs sm:text-sm mt-3 sm:mt-0">
+            {product?.categoria.nombre}
+          </p>
+        </div>
+        <div className="w-[100%] flex-row sm:flex items-center gap-4 mt-3">
+          <h2 className="font-bold text-[#ff7751] text-sm sm:text-base">
+            MARCA:
+          </h2>
+          <p className="font-semibold text-xs sm:text-sm mt-3 sm:mt-0">
+            {product?.marca.nombre}
+          </p>
+        </div>
+      </>
+    );
+  };
+
+  useEffect(() => {
+    const loadProduct = async (id) => {
+      try {
+        const { data } = await fetchProductForId(id);
+        setProduct(data);
+      } catch (error) {
+        setProduct(null);
+      }
+    };
+
+    if (router.query?.id) {
+      loadProduct(router.query.id);
+    }
+  }, [router.query.id]);
 
   return (
     <Layout title="| PRODUCTO">
@@ -118,8 +179,20 @@ const Product = () => {
           </div>
         </div>
         <div className="w-[50%]">
-          <h2 className="text-4xl font-bold">Zip Tote Basket</h2>
-          <p className="text-3xl mt-4">$140</p>
+          <h2 className="text-4xl font-bold">{product?.nombre}</h2>
+          <div className="flex items-center justify-between">
+            <p className="text-sm sm:text-base mt-4">
+              Stock:{" "}
+              <span
+                className={`${
+                  product?.cantidad >= 5 ? "text-green-900" : "text-red-900"
+                } font-bold`}
+              >
+                {product?.cantidad}
+              </span>
+            </p>
+            <p className="text-sm sm:text-xl mt-4">S/. {product?.precio}</p>
+          </div>
           <div className="flex items-center gap-2 mt-4">
             <HiMiniStar
               className={`text-[12px] sm:text-[16px] text-[#FF5E3A]`}
@@ -134,13 +207,7 @@ const Product = () => {
               className={`text-[12px] sm:text-[16px] text-gray-400`}
             />
           </div>
-          <p className="mt-4 text-lg text-[#4F5665]">
-            The Zip Tote Basket is the perfect midpoint between shopping tote
-            and comfy backpack. With convertible straps, you can hand carry,
-            should sling, or backpack this convenient and spacious bag. The zip
-            top and durable canvas construction keeps your goods protected for
-            all-day use.
-          </p>
+          <p className="mt-4 text-lg text-[#4F5665]">{product?.descripcion}</p>
           {/* SELECCION DE COLORES */}
           <h3 className="mt-5 text-[#636c7d] text-sm font-bold">Color:</h3>
           <div className="w-[100%] flex items-center gap-5 mt-3">
@@ -192,96 +259,26 @@ const Product = () => {
           {/* SELECCION DE TALLAS */}
           <h3 className="mt-5 text-[#636c7d] text-sm font-bold">Talla:</h3>
           <div className="w-[100%] grid grid-cols-8 mt-3 ">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="xxs"
-                className="hidden"
-                onChange={() => handleSizeSelection("xxs")}
-              />
-              <span
-                className={`w-[100px] text-center py-3 border rounded-md  cursor-pointer  font-bold sm:text-sm ${
-                  selectedSize === "xxs"
-                    ? "ring ring-offset-1 bg-gradient-to-t from-rose-400 to-[#ff664a] text-white"
-                    : ""
-                }`}
-              >
-                XXS
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="xs"
-                className="hidden"
-                onChange={() => handleSizeSelection("xs")}
-              />
-              <span
-                className={`w-[100px] text-center py-3 border rounded-md  cursor-pointer font-bold sm:text-sm ${
-                  selectedSize === "xs"
-                    ? "ring ring-offset-1 bg-gradient-to-t from-rose-400 to-[#ff664a] text-white"
-                    : ""
-                }`}
-              >
-                XS
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="s"
-                className="hidden"
-                onChange={() => handleSizeSelection("s")}
-              />
-              <span
-                className={`w-[100px] text-center py-3 border rounded-md cursor-pointer font-bold sm:text-sm ${
-                  selectedSize === "s"
-                    ? "ring ring-offset-1 bg-gradient-to-t from-rose-400 to-[#ff664a] text-white"
-                    : ""
-                }`}
-              >
-                S
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="m"
-                className="hidden"
-                onChange={() => handleSizeSelection("m")}
-              />
-              <span
-                className={`w-[100px] text-center py-3 border rounded-md cursor-pointer font-bold sm:text-sm ${
-                  selectedSize === "m"
-                    ? "ring ring-offset-1 bg-gradient-to-t from-rose-400 to-[#ff664a] text-white"
-                    : ""
-                }`}
-              >
-                M
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="l"
-                className="hidden"
-                onChange={() => handleSizeSelection("l")}
-              />
-              <span
-                className={`w-[100px] text-center py-3 border rounded-md cursor-pointer font-bold sm:text-sm ${
-                  selectedSize === "l"
-                    ? "ring ring-offset-1 bg-gradient-to-t from-rose-400 to-[#ff664a] text-white"
-                    : ""
-                }`}
-              >
-                L
-              </span>
-            </label>
+            {product?.producto_tallas.map((itemSize, index) => (
+              <label key={index} className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="size-button"
+                  value={itemSize.talla}
+                  className="hidden"
+                  onChange={() => handleSizeSelection(itemSize.talla)}
+                />
+                <span
+                  className={`w-[100px] text-center py-3 border rounded-md  cursor-pointer  font-bold sm:text-sm ${
+                    selectedSize === itemSize.talla
+                      ? "ring ring-offset-1 bg-gradient-to-t from-rose-400 to-[#ff664a] text-white"
+                      : ""
+                  }`}
+                >
+                  {itemSize.talla}
+                </span>
+              </label>
+            ))}
           </div>
           {/* BOTON DE AGREGADO */}
           <div className="w-[100%] mt-8">
@@ -292,10 +289,7 @@ const Product = () => {
 
           {/* DETALLES */}
           <div className="mt-7">
-            <Accordeon
-              title="Detalle del Producto"
-              content="The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming Charcoal Gray limited release."
-            />
+            <Accordeon title="Detalle del Producto" content={getMoreDetail()} />
           </div>
         </div>
       </div>
