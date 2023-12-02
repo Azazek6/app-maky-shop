@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
 import InputFileComponent from "../InputFileComponent";
 import InputComponent from "../InputComponent";
 import TextComponent from "../TextComponent";
@@ -8,10 +10,19 @@ import { toastMessage } from "@/helpers/general";
 import { useGlobal } from "@/context/GlobalProvider";
 import genders from "@/sample/genders.json";
 import stages from "@/sample/stages.json";
+import { host } from "@/configuration/utils";
 
 const ProductForm = () => {
-  const { createProduct, brand, category, fetchBrand, fetchCategory } =
-    useGlobal();
+  const {
+    createProduct,
+    updateProduct,
+    brand,
+    category,
+    fetchBrand,
+    fetchCategory,
+    fetchProductForId,
+  } = useGlobal();
+  const router = useRouter();
   //Estados
   const [isCheckedS, setIsCheckedS] = useState(false);
   const [isCheckedM, setIsCheckedM] = useState(false);
@@ -77,6 +88,7 @@ const ProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    productData.image = selectedFile ? selectedFile.name : productData.image;
     productData.size = [
       { status: isCheckedS, name: "S" },
       { status: isCheckedM, name: "M" },
@@ -101,11 +113,36 @@ const ProductForm = () => {
     }
 
     try {
-      const { status, data } = await createProduct(productData);
+      if (selectedFile) {
+        const formData = new FormData();
+
+        formData.append("file", selectedFile);
+        const token = localStorage.getItem("tokenMakyPanel");
+
+        const { status } = await axios.post(
+          `${host}/productos/${token}/upload-image`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (status == 201) {
+          setSelectedFile(null);
+        }
+      }
+
+      const { status, data } = router.query.id
+        ? await updateProduct(router.query.id, productData)
+        : await createProduct(productData);
 
       if (status == 201) {
         setLoading(false);
-        clear();
+        if (!router.query.id) {
+          clear();
+        }
         toastMessage(data.message, 1);
       }
     } catch (error) {
@@ -118,6 +155,39 @@ const ProductForm = () => {
     fetchBrand();
     fetchCategory();
   }, []);
+
+  useEffect(() => {
+    const loadData = async (id) => {
+      try {
+        const { data } = await fetchProductForId(id);
+        data.producto_tallas.map(({ talla }) => {
+          setIsCheckedS(talla == "S");
+          setIsCheckedM(talla == "M");
+          setIsCheckedL(talla == "L");
+          setIsCheckedXL(talla == "XL");
+        });
+        setProductData({
+          code: data.codigo,
+          name: data.nombre,
+          price: data.precio,
+          stock: data.cantidad,
+          id_brand: data.marca.id_marca,
+          id_category: data.categoria.id_categoria,
+          size: [],
+          image: data.imagen,
+          description: data.descripcion,
+          id_gender: data.genero.id_genero,
+          id_stage: data.etapa.id_etapa,
+        });
+      } catch (error) {
+        clear();
+      }
+    };
+
+    if (router.query?.id) {
+      loadData(router.query.id);
+    }
+  }, [router.query.id]);
 
   return (
     <div className="w-[100%] flex-row">
@@ -215,10 +285,11 @@ const ProductForm = () => {
           />
         </div>
         <div className="mt-8 relative flex-row lg:flex items-center">
-          {/* <InputFileComponent
+          <InputFileComponent
+            title="Imagen Referencial"
             file={selectedFile}
             handleChange={handleFileChange}
-          /> */}
+          />
         </div>
         <div className="mt-5">
           <TextComponent
@@ -233,7 +304,7 @@ const ProductForm = () => {
             disabled={loading}
             className="bg-[#ff5151] text-xs sm:text-base text-white font-bold p-2 w-[100%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out"
           >
-            Registrar
+            {router.query.id ? "Modificar" : "Registrar"}
           </button>
         </div>
       </form>

@@ -7,6 +7,7 @@ import {
   HiOutlineInformationCircle,
 } from "react-icons/hi2";
 import ProductDetailModal from "../Modal/ProductDetailModal";
+import { host_product_image } from "@/configuration/utils";
 
 const CardGeneral = ({ data, pageSize = 6 }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -68,7 +69,7 @@ const CardGeneral = ({ data, pageSize = 6 }) => {
             <div className="w-[60%] flex justify-center items-center p-3 ">
               <img
                 className="w-[100%]"
-                src={datas.image != "" ? "/card-item.png" : datas.image}
+                src={datas.imagen == "" ? "/card-item.png" : `${host_product_image}/${datas.imagen}`}
                 alt=""
               />
             </div>

@@ -185,7 +185,7 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                     onClick={() => {
                       setOpen(false);
                       router.push(
-                        `/admin/dashboard/product/edit/${productId?.id_producto}`
+                        `/admin/dashboard/product/edit/${idProduct}`
                       );
                     }}
                     ref={cancelButtonRef}

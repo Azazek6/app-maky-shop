@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { HiMiniStar } from "react-icons/hi2";
+import { host_product_image } from "@/configuration/utils";
 
 const CardItem = ({ item }) => {
   return (
@@ -11,10 +12,21 @@ const CardItem = ({ item }) => {
           className="w-[100%] flex-row bg-gradient-to-t from-red-200 to-amber-100 rounded-xl"
         >
           <div className="flex justify-center items-center p-3">
-            <img className="w-[100px] sm:w-[150px]" src={imagen != "" ? imagen : '/card-item.png'} alt="" />
+            <img
+              className="w-[100px] sm:w-[150px]"
+              src={
+                imagen != ""
+                  ? `${host_product_image}/${imagen}`
+                  : "/card-item.png"
+              }
+              alt=""
+            />
           </div>
           <div className="flex-row bg-white py-3 px-5">
-            <Link href={`/product/${id}`} className="text-[10px] font-bold sm:text-xs sm:font-normal hover:text-[#FF5E3A]">
+            <Link
+              href={`/product/${id}`}
+              className="text-[10px] font-bold sm:text-xs sm:font-normal hover:text-[#FF5E3A]"
+            >
               {nombre}
             </Link>
             <div className="w-[100%] flex items-center justify-between mt-5">

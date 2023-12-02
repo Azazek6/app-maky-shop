@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputFileComponent = ({ handleChange, file }) => {
+const InputFileComponent = ({ title, handleChange, file }) => {
   return (
     <>
       <label
@@ -21,7 +21,7 @@ const InputFileComponent = ({ handleChange, file }) => {
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           />
         </svg>
-        <span className="text-xs sm:text-sm">Seleccionar Imagen</span>
+        <span className="text-xs sm:text-sm"> {title} </span>
       </label>
       <input
         type="file"

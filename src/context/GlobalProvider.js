@@ -131,6 +131,16 @@ export const GlobalContextProvider = ({ children }) => {
     return await axios.post(`${host}/productos/${token}`, product);
   };
 
+  const createImagesProduct = async (id,image) => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.post(`${host}/productos/${token}/images/${id}`, image);
+  };
+
+  const updateProduct = async (id,product) => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.put(`${host}/productos/${token}/${id}`, product);
+  };
+
   const fetchProduct = async () => {
     try {
       const { data } = await axios.get(`${host}/productos`);
@@ -186,6 +196,8 @@ export const GlobalContextProvider = ({ children }) => {
         fetchCategory,
         fetchCategoryForId,
         createProduct,
+        createImagesProduct,
+        updateProduct,
         fetchProduct,
         fetchProductForId,
         showCredentials,
