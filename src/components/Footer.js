@@ -88,7 +88,7 @@ const Footer = () => {
       </div>
       <div className="w-[100%]">
         <h2 className="font-bold">Cuenta</h2> <br />
-        <Link href="" className="text-sm">
+        <Link href="/account" className="text-sm">
           Mi cuenta
         </Link>{" "}
         <br />

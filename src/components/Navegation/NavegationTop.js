@@ -5,18 +5,27 @@ import {
   HiOutlineXMark,
   HiOutlineMagnifyingGlass,
   HiOutlineUser,
-  HiOutlineBell,
-  HiOutlineWrenchScrewdriver,
+  HiOutlineShoppingBag,
+  HiOutlineArrowRightOnRectangle,
 } from "react-icons/hi2";
 import { useGlobal } from "../../context/GlobalProvider";
 
 const NavegationTop = () => {
   const {
+    addProductToCar,
     userData,
     actionBar,
     handleClickShowActionBar,
     handleClickShowCredential,
   } = useGlobal();
+
+  console.log(addProductToCar)
+
+  const singOut = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("tokenMakyShop");
+    location.reload();
+  };
 
   return (
     <>
@@ -68,23 +77,26 @@ const NavegationTop = () => {
             </Link>
           )}
 
+          <Link
+            href="/shoppingCar"
+            className="hover:text-[#FF5151] hover:font-bold text-2xl relative"
+          >
+            <HiOutlineShoppingBag />
+            <span className="absolute -top-2 left-4 bg-[#FF5E3A] text-xs text-white rounded-full px-2 py-1">
+              {addProductToCar.length}
+            </span>
+          </Link>
+
           {userData && (
             <Link
-              href="/admin"
-              target="_blank"
-              title="Dashboard"
+              href=""
+              onClick={singOut}
+              title="Cerrar sesión"
               className="hover:text-[#FF5151] hover:font-bold text-2xl"
             >
-              <HiOutlineWrenchScrewdriver />
+              <HiOutlineArrowRightOnRectangle />
             </Link>
           )}
-
-          <Link
-            href="/"
-            className="hover:text-[#FF5151] hover:font-bold text-2xl"
-          >
-            <HiOutlineBell />
-          </Link>
         </div>
       </nav>
       {/* NAVEGACION MOBIL */}
@@ -120,32 +132,28 @@ const NavegationTop = () => {
             Mi Perfil
           </Link>
         </div>
-        <div className="w-[100%] mt-2">
-          <Link
-            href="/signin"
-            className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
-          >
-            Iniciar Sesi&oacute;n
-          </Link>
-        </div>
-        <div className="w-[100%] mt-2">
-          <Link
-            href="/admin/signin"
-            target="_blank"
-            title="Dashboard"
-            className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
-          >
-            <HiOutlineWrenchScrewdriver />
-          </Link>
-        </div>
-        <div className="w-[100%] mt-2">
-          <Link
-            href="/signin"
-            className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
-          >
-            Cerrar Sesi&oacute;n
-          </Link>
-        </div>
+        {!userData && (
+          <div className="w-[100%] mt-2">
+            <Link
+              href="/signin"
+              className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
+            >
+              Iniciar Sesi&oacute;n
+            </Link>
+          </div>
+        )}
+
+        {userData && (
+          <div className="w-[100%] mt-2">
+            <Link
+              href=""
+              onClick={singOut}
+              className="hover:text-[#FF5151] hover:font-bold text-sm block p-1"
+            >
+              Cerrar Sesi&oacute;n
+            </Link>
+          </div>
+        )}
       </nav>
     </>
   );

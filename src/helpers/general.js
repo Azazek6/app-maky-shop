@@ -17,3 +17,13 @@ export const toastMessage = (message, status) => {
       ),
   });
 };
+
+// Calcular el sub Total del producto
+export const calSubTotalProduct = (product) => {
+  let total = product.reduce(
+    (acc, currItem) => acc + parseFloat(currItem.monto_total),
+    0
+  );
+
+  return parseFloat(total).toFixed(2);
+};
