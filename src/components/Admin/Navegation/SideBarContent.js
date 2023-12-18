@@ -14,7 +14,7 @@ import { useGlobal } from "@/context/GlobalProvider";
 import jwt_decode from "jwt-decode";
 
 const SideBarContent = ({ children }) => {
-  const {userDataPanel} = useGlobal()
+  const { userDataPanel } = useGlobal();
   const router = useRouter();
 
   const [userData, setUserData] = useState(null);
@@ -83,7 +83,7 @@ const SideBarContent = ({ children }) => {
             </div>
             <div className="w-[100%] border-b-2 p-[19px]">
               <Link
-                href=""
+                href="/admin/dashboard/order"
                 className="flex items-center ml-10 gap-5 text-[#606879] hover:text-[#FF5151] font-bold text-sm transition-all duration-300 ease-in-out"
               >
                 <FaDiceFour />

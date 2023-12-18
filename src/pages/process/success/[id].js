@@ -47,14 +47,14 @@ const Payment = () => {
 
           <div className="mt-6 space-y-4">
             <button
-              onClick={() => router.push("/")}
+              onClick={() => (location.href = "/")}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
             >
               Volver a la tienda
             </button>
 
             <button
-              onClick={() => router.push("/account/my-order")}
+              onClick={() => (location.href = "/order")}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-600"
             >
               Ver mis pedidos

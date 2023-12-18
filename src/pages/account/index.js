@@ -18,7 +18,7 @@ const Home = () => {
           </h3>
           <div className="w-full grid grid-cols-1 ml-10">
             <Link
-              href=""
+              href="/order"
               className="w-[100%] font-bold hover:underline text-sm"
             >
               - Historial de Pedidos

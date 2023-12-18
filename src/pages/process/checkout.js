@@ -2,20 +2,42 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { Toaster } from "sonner";
+import jwt_decode from "jwt-decode";
 import InputComponent from "@/components/Admin/InputComponent";
 import TextComponent from "@/components/Admin/TextComponent";
 import { host_product_image } from "@/configuration/utils";
-import { calSubTotalProduct } from "@/helpers/general";
+import { calSubTotalProduct, toastMessage } from "@/helpers/general";
 import { useGlobal } from "@/context/GlobalProvider";
 
 const Checkout = () => {
-  const { addProductToCar } = useGlobal();
+  const { createOrder, addProductToCar } = useGlobal();
 
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [sendSize, setSendSize] = useState("");
   const [typeDocument, setTypeDocument] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [sendAmount, setSendAmount] = useState(0);
+  const [orderData, setOrderData] = useState({
+    product: [],
+    totalAmount: "",
+    shippingMethod: "",
+    distric: "",
+    province: "",
+    street: "",
+    office: "",
+    postalCode: "",
+    details: "",
+    email: "",
+    names: "",
+    lastnames: "",
+    phone: "",
+    documentTyoe: "",
+    document: "",
+    businessName: "",
+    paymentMethod: "",
+  });
 
   const handleSendSelection = (type) => {
     setSendSize(type);
@@ -29,11 +51,52 @@ const Checkout = () => {
     setPaymentMethod(type);
   };
 
+  const handleChange = ({ target: { name, value } }) => {
+    setOrderData({ ...orderData, [name]: value });
+  };
+
   const calTotalPayment = () => {
     let total =
       parseFloat(calSubTotalProduct(addProductToCar)) + parseFloat(sendAmount);
     return total.toFixed(2);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    orderData.shippingMethod = sendSize;
+    orderData.documentTyoe = typeDocument;
+    orderData.paymentMethod = paymentMethod;
+    orderData.product = addProductToCar;
+    orderData.totalAmount = calTotalPayment();
+
+    try {
+      const { status, data } = await createOrder(orderData);
+
+      if (status == 201) {
+        setLoading(false);
+        toastMessage(data.message, 1);
+        setTimeout(() => {
+          localStorage.removeItem("ShoppingCarMakys");
+          router
+            .push(`/process/success/${data.id_orden}`)
+            .then(() => router.replace(`/process/success/${data.id_orden}`));
+        }, 1500);
+      }
+    } catch (error) {
+      setLoading(false);
+      toastMessage(error.response.data.message, 3);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("tokenMakyShop");
+
+    if (token) {
+      const { email } = jwt_decode(token);
+      orderData.email = email;
+    }
+  }, []);
 
   useEffect(() => {
     if (sendSize == "DOMICILIO") {
@@ -47,6 +110,7 @@ const Checkout = () => {
       <Head>
         <title>MAKYS | Informaci&oacute;n de Env&iacute;o</title>
       </Head>
+      <Toaster theme="light" position="top-right" duration={2000} />
       <div className="w-[100%] m-auto flex justify-center fixed py-5 bg-white">
         <Link
           href="/"
@@ -58,193 +122,257 @@ const Checkout = () => {
       </div>
       <div className="w-[80%] m-auto flex pt-[240px] gap-10">
         <div className="w-[50%]">
-          <h2 className="text-[#a2a5a7] text-3xl font-bold">
-            Detalles de Env&iacute;o
-          </h2>
-          <h4 className="text-[#a2a5a7] text-lg mt-5">
-            ¿C&Oacute;MO QUIERES RECIBIR TU PEDIDO?
-          </h4>
-          <div className="w-[100%] grid grid-cols-2 gap-4 mt-5 ">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="DOMICILIO"
-                className="hidden"
-                onChange={() => handleSendSelection("DOMICILIO")}
+          <form onSubmit={handleSubmit}>
+            <h2 className="text-[#a2a5a7] text-3xl font-bold">
+              Detalles de Env&iacute;o
+            </h2>
+            <h4 className="text-[#a2a5a7] text-lg mt-5">
+              ¿C&Oacute;MO QUIERES RECIBIR TU PEDIDO?
+            </h4>
+            <div className="w-[100%] grid grid-cols-2 gap-4 mt-5 ">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="size-button"
+                  value="DOMICILIO"
+                  className="hidden"
+                  onChange={() => handleSendSelection("DOMICILIO")}
+                />
+                <span
+                  className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer  font-bold sm:text-sm transition-all duration-300 ease-in-out ${
+                    sendSize === "DOMICILIO"
+                      ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
+                      : ""
+                  }`}
+                >
+                  Env&iacute;o a Domicilio
+                </span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="size-button"
+                  value="TIENDA"
+                  className="hidden"
+                  onChange={() => handleSendSelection("TIENDA")}
+                />
+                <span
+                  className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer font-bold sm:text-sm transition-all duration-300 ease-in-out ${
+                    sendSize === "TIENDA"
+                      ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
+                      : ""
+                  }`}
+                >
+                  Recogo en Tienda
+                </span>
+              </label>
+            </div>
+            <h4 className="text-[#a2a5a7] text-lg mt-5">
+              DIRECCI&Oacute; DE ENTREGA
+            </h4>
+            <div className="flex mt-3 items-center gap-5">
+              <InputComponent
+                placeholder="Distrito"
+                name="distric"
+                value={orderData.distric}
+                onChange={handleChange}
               />
-              <span
-                className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer  font-bold sm:text-sm transition-all duration-300 ease-in-out ${
-                  sendSize === "DOMICILIO"
-                    ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
-                    : ""
-                }`}
-              >
-                Env&iacute;o a Domicilio
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="size-button"
-                value="TIENDA"
-                className="hidden"
-                onChange={() => handleSendSelection("TIENDA")}
+              <InputComponent
+                placeholder="Provincia"
+                name="province"
+                value={orderData.province}
+                onChange={handleChange}
               />
-              <span
-                className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer font-bold sm:text-sm transition-all duration-300 ease-in-out ${
-                  sendSize === "TIENDA"
-                    ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
-                    : ""
-                }`}
-              >
-                Recogo en Tienda
-              </span>
-            </label>
-          </div>
-          <h4 className="text-[#a2a5a7] text-lg mt-5">
-            DIRECCI&Oacute; DE ENTREGA
-          </h4>
-          <div className="flex mt-3 items-center gap-5">
-            <InputComponent placeholder="Distrito" />
-            <InputComponent placeholder="Provincia" />
-          </div>
-          <InputComponent placeholder="Calle y Número" classStyle="mt-3" />
-          <div className="flex mt-3 items-center gap-5">
-            <InputComponent placeholder="Dpto, Oficina, etc..(* Opcional)" />
+            </div>
             <InputComponent
-              placeholder="Codigo Postal (* Opcional)"
-              type="number"
+              placeholder="Calle y Número"
+              name="street"
+              value={orderData.street}
+              onChange={handleChange}
+              classStyle="mt-3"
             />
-          </div>
-          <div className="mt-3">
-            <TextComponent title="Detalles adicionales o referencias (* Opcional)" />
-          </div>
-          <h4 className="text-[#a2a5a7] text-lg mt-4">DETALLES DE CONTACTO</h4>
-          <InputComponent placeholder="Correo eletrónico" classStyle="mt-3" />
-          <div className="flex mt-3 items-center gap-5">
-            <InputComponent placeholder="Nombres" />
-            <InputComponent placeholder="Apellidos" />
-          </div>
-          <InputComponent
-            placeholder="Número telefónico"
-            type="number"
-            classStyle="mt-3"
-          />
-          <h4 className="text-[#a2a5a7] text-lg mt-4">DOCUMENTO DE COMPRA</h4>
-          <div className="w-[100%] grid grid-cols-2 gap-4 mt-5 ">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="document-button"
-                value="BOLETA"
-                className="hidden"
-                onChange={() => handleDocumentSelection("BOLETA")}
+            <div className="flex mt-3 items-center gap-5">
+              <InputComponent
+                placeholder="Dpto, Oficina, etc..(* Opcional)"
+                name="office"
+                value={orderData.office}
+                onChange={handleChange}
               />
-              <span
-                className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer  font-bold sm:text-sm transition-all duration-300 ease-in-out ${
-                  typeDocument === "BOLETA"
-                    ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
-                    : ""
-                }`}
-              >
-                BOLETA
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="document-button"
-                value="FACTURA"
-                className="hidden"
-                onChange={() => handleDocumentSelection("FACTURA")}
+              <InputComponent
+                placeholder="Codigo Postal (* Opcional)"
+                type="number"
+                value={orderData.postalCode}
+                name="postalCode"
+                onChange={handleChange}
               />
-              <span
-                className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer font-bold sm:text-sm transition-all duration-300 ease-in-out ${
-                  typeDocument === "FACTURA"
-                    ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
-                    : ""
-                }`}
-              >
-                FACTURA
-              </span>
-            </label>
-          </div>
-          <div className="flex mt-5 items-center gap-5">
-            <InputComponent placeholder="DNI o RUC" type="number" />
-            {typeDocument == "FACTURA" && (
-              <InputComponent placeholder="Razón Social" />
-            )}
-          </div>
-          <h4 className="text-[#a2a5a7] text-lg mt-5">MEDIO DE PAGO</h4>
-          <div className="w-[100%] grid grid-cols-1 gap-4 mt-5 ">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="payment-button"
-                value="TRANSFERENCIA"
-                className="hidden"
-                onChange={() => handlePaymentMethodSelection("TRANSFERENCIA")}
+            </div>
+            <div className="mt-3">
+              <TextComponent
+                title="Detalles adicionales o referencias (* Opcional)"
+                name="details"
+                value={orderData.details}
+                handleChange={handleChange}
               />
-              <span
-                className={`w-[100%] py-3 border pl-5 border-[#aaa] rounded-md  cursor-pointer  font-bold sm:text-sm transition-all duration-300 ease-in-out ${
-                  paymentMethod === "TRANSFERENCIA"
-                    ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
-                    : ""
-                }`}
-              >
-                TRASNFERENCIA BANCARIA <br />
-                <div className="flex font-normal mt-3">
-                  <div className="w-[50%]">
-                    <span className="font-bold">Banco: </span>BCP
+            </div>
+            <h4 className="text-[#a2a5a7] text-lg mt-4">
+              DETALLES DE CONTACTO
+            </h4>
+            <InputComponent
+              placeholder="Correo eletrónico"
+              name="email"
+              value={orderData.email}
+              onChange={handleChange}
+              classStyle="mt-3"
+            />
+            <div className="flex mt-3 items-center gap-5">
+              <InputComponent
+                placeholder="Nombres"
+                name="names"
+                value={orderData.names}
+                onChange={handleChange}
+              />
+              <InputComponent
+                placeholder="Apellidos"
+                name="lastnames"
+                value={orderData.lastnames}
+                onChange={handleChange}
+              />
+            </div>
+            <InputComponent
+              placeholder="Número telefónico"
+              type="number"
+              name="phone"
+              value={orderData.phone}
+              onChange={handleChange}
+              classStyle="mt-3"
+            />
+            <h4 className="text-[#a2a5a7] text-lg mt-4">DOCUMENTO DE COMPRA</h4>
+            <div className="w-[100%] grid grid-cols-2 gap-4 mt-5 ">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="document-button"
+                  value="BOLETA"
+                  className="hidden"
+                  onChange={() => handleDocumentSelection("BOLETA")}
+                />
+                <span
+                  className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer  font-bold sm:text-sm transition-all duration-300 ease-in-out ${
+                    typeDocument === "BOLETA"
+                      ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
+                      : ""
+                  }`}
+                >
+                  BOLETA
+                </span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="document-button"
+                  value="FACTURA"
+                  className="hidden"
+                  onChange={() => handleDocumentSelection("FACTURA")}
+                />
+                <span
+                  className={`w-[100%] text-center py-3 border border-[#aaa] rounded-md  cursor-pointer font-bold sm:text-sm transition-all duration-300 ease-in-out ${
+                    typeDocument === "FACTURA"
+                      ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
+                      : ""
+                  }`}
+                >
+                  FACTURA
+                </span>
+              </label>
+            </div>
+            <div className="flex mt-5 items-center gap-5">
+              <InputComponent
+                placeholder="DNI o RUC"
+                type="number"
+                name="document"
+                value={orderData.document}
+                onChange={handleChange}
+              />
+              {typeDocument == "FACTURA" && (
+                <InputComponent
+                  placeholder="Razón Social"
+                  name="businessName"
+                  value={orderData.businessName}
+                  onChange={handleChange}
+                />
+              )}
+            </div>
+            <h4 className="text-[#a2a5a7] text-lg mt-5">MEDIO DE PAGO</h4>
+            <div className="w-[100%] grid grid-cols-1 gap-4 mt-5 ">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="payment-button"
+                  value="TRANSFERENCIA"
+                  className="hidden"
+                  onChange={() => handlePaymentMethodSelection("TRANSFERENCIA")}
+                />
+                <span
+                  className={`w-[100%] py-3 border pl-5 border-[#aaa] rounded-md  cursor-pointer  font-bold sm:text-sm transition-all duration-300 ease-in-out ${
+                    paymentMethod === "TRANSFERENCIA"
+                      ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
+                      : ""
+                  }`}
+                >
+                  TRASNFERENCIA BANCARIA <br />
+                  <div className="flex font-normal mt-3">
+                    <div className="w-[50%]">
+                      <span className="font-bold">Banco: </span>BCP
+                    </div>
+                    <div className="w-[50%]">
+                      <span className="font-bold">N° Cuenta: </span>123456789
+                    </div>
                   </div>
-                  <div className="w-[50%]">
-                    <span className="font-bold">N° Cuenta: </span>123456789
+                </span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="payment-button"
+                  value="YAPE"
+                  className="hidden"
+                  onChange={() => handlePaymentMethodSelection("YAPE")}
+                />
+                <span
+                  className={`w-[100%] pl-5 py-3 border border-[#aaa] rounded-md  cursor-pointer font-bold sm:text-sm transition-all duration-300 ease-in-out ${
+                    paymentMethod === "YAPE"
+                      ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
+                      : ""
+                  }`}
+                >
+                  YAPE <br />
+                  <div className="flex font-normal mt-3 gap-5">
+                    <span className="font-bold">Numero: </span> (+52) 965 487
+                    654
                   </div>
-                </div>
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="payment-button"
-                value="YAPE"
-                className="hidden"
-                onChange={() => handlePaymentMethodSelection("YAPE")}
-              />
-              <span
-                className={`w-[100%] pl-5 py-3 border border-[#aaa] rounded-md  cursor-pointer font-bold sm:text-sm transition-all duration-300 ease-in-out ${
-                  paymentMethod === "YAPE"
-                    ? "ring ring-offset-1 bg-[#ebebeb] text-[#767676]"
-                    : ""
-                }`}
+                </span>
+              </label>
+            </div>
+            <div className="my-10  flex items-center justify-between">
+              <button
+                onClick={() => {
+                  router.push("/");
+                }}
+                disabled={loading}
+                className="border border-[#FF5E3A] hover:opacity-70 text-xs sm:text-sm text-black py-2 px-5 font-bold rounded-xl transition-all duration-300 ease-in-out"
               >
-                YAPE <br />
-                <div className="flex font-normal mt-3 gap-5">
-                  <span className="font-bold">Numero: </span> (+52) 965 487 654
-                </div>
-              </span>
-            </label>
-          </div>
-          <div className="my-10  flex items-center justify-between">
-            <button
-              onClick={() => {
-                router.push("/");
-              }}
-              className="border border-[#FF5E3A] hover:opacity-70 text-xs sm:text-sm text-black py-2 px-5 font-bold rounded-xl transition-all duration-300 ease-in-out"
-            >
-              Seguir comprando
-            </button>
-            <button
-              onClick={() => {
-                router.push("/process/payment");
-              }}
-              className="bg-[#FF5E3A] hover:opacity-70 text-xs sm:text-base text-white py-2 px-5 font-bold rounded-xl transition-all duration-300 ease-in-out"
-            >
-              Continuar {`>`}
-            </button>
-          </div>
+                Seguir comprando
+              </button>
+              <button
+                disabled={loading}
+                className="bg-[#FF5E3A] hover:opacity-70 text-xs sm:text-base text-white py-2 px-5 font-bold rounded-xl transition-all duration-300 ease-in-out"
+              >
+                Continuar {`>`}
+              </button>
+            </div>
+          </form>
         </div>
+
         <div className="w-[50%]">
           <div className="border p-5">
             <h2 className="text-[#a2a5a7] text-lg font-bold">

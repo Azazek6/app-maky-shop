@@ -19,8 +19,6 @@ const NavegationTop = () => {
     handleClickShowCredential,
   } = useGlobal();
 
-  console.log(addProductToCar)
-
   const singOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("tokenMakyShop");

@@ -27,3 +27,10 @@ export const calSubTotalProduct = (product) => {
 
   return parseFloat(total).toFixed(2);
 };
+
+export const truncateText = (text, maxLength) => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "...";
+  }
+  return text;
+};

@@ -26,6 +26,8 @@ export const GlobalContextProvider = ({ children }) => {
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
   const [product, setProduct] = useState([]);
+  const [order, setOrder] = useState([]);
+  const [client, setClient] = useState([]);
 
   // --------------------------------------------- FUNCIONES DEL CARRO DE COMPRA -----------------------------------------
   // -------------- Agregar al carrito
@@ -212,6 +214,58 @@ export const GlobalContextProvider = ({ children }) => {
     return await axios.get(`${host}/productos/find/${id}`);
   };
 
+  // --------------------------- Orden de compra
+  const createOrder = async (order) => {
+    const token = localStorage.getItem("tokenMakyShop");
+    return await axios.post(`${host}/ordenes/${token}`, order);
+  };
+
+  const fetchOrdersForClient = async () => {
+    const token = localStorage.getItem("tokenMakyShop");
+    try {
+      const { data } = await axios.get(`${host}/ordenes/${token}`);
+      setOrder(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchOrders = async () => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    try {
+      const { data } = await axios.get(`${host}/ordenes/${token}/entrantes`);
+      setOrder(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createImagesOrderPay = async (id, image) => {
+    const token = localStorage.getItem("tokenMakyShop");
+    return await axios.post(`${host}/ordenes/${token}/images/${id}`, image);
+  };
+
+  // ----------------------- Clientes
+  const createClient = async (client) => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.post(`${host}/clientes/${token}`, client);
+  };
+
+  const fetchClients = async () => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    try {
+      const { data } = await axios.get(`${host}/clientes/${token}`);
+      setClient(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchClientForDocument = async (id) => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.get(`${host}/clientes/${token}/${id}`);
+  };
+
   //Credenciales
   useEffect(() => {
     const token = localStorage.getItem("tokenMakyShop");
@@ -252,6 +306,7 @@ export const GlobalContextProvider = ({ children }) => {
         brand,
         category,
         product,
+        order,
         singUp,
         UpdateUser,
         fetchUser,
@@ -269,6 +324,13 @@ export const GlobalContextProvider = ({ children }) => {
         updateProduct,
         fetchProduct,
         fetchProductForId,
+        createOrder,
+        fetchOrders,
+        fetchOrdersForClient,
+        createImagesOrderPay,
+        createClient,
+        fetchClients,
+        fetchClientForDocument,
         showCredentials,
         handleClickShowActionBar,
         handleClickShowCredential,
