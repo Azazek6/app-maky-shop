@@ -1,11 +1,12 @@
 import React from "react";
 
-const TextComponent = ({ title, name, value, handleChange }) => {
+const TextComponent = ({ title, status, name, value, handleChange }) => {
   return (
     <textarea
       name={name}
       id={name}
       value={value}
+      disabled={status}
       onChange={handleChange}
       cols="30"
       rows="10"
