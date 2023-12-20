@@ -6,6 +6,10 @@ import TextComponent from "../TextComponent";
 import InputComponent from "../InputComponent";
 import SelectedComponent from "../SelectedComponent";
 import ClientModal from "../Modal/ClientModal";
+import ProductSaleModal from "../Modal/ProductSaleModal";
+import TableProductSales from "../Table/TableProductSales";
+import { useGlobal } from "@/context/GlobalProvider";
+import { calSubTotalProduct, calDiscountProduct } from "@/helpers/general";
 
 const typeMethod = [
   {
@@ -29,7 +33,39 @@ const paymentMethod = [
   },
 ];
 
+const titleProductTable = [
+  {
+    id: "code",
+    name: "Codigo",
+  },
+  {
+    id: "product",
+    name: "Producto",
+  },
+  {
+    id: "stock",
+    name: "Cantidad",
+  },
+  {
+    id: "price",
+    name: "Precio",
+  },
+  {
+    id: "monto_total",
+    name: "Importe",
+  },
+  {
+    id: "igv",
+    name: "IGV",
+  },
+  {
+    id: "discount",
+    name: "Descuento",
+  },
+];
+
 const SalesForm = () => {
+  const { productAdddSale } = useGlobal();
   //Modal Cliente
   const [openClient, setOpenClient] = useState(false);
   const cancelButtonRefClient = useRef(null);
@@ -83,6 +119,12 @@ const SalesForm = () => {
         open={openClient}
         setOpen={setOpenClient}
         cancelButtonRef={cancelButtonRefClient}
+      />
+      <ProductSaleModal
+        //dataClient={salesForm}
+        open={openProduct}
+        setOpen={setOpenProduct}
+        cancelButtonRef={cancelButtonRefProduct}
       />
       <div className="w-full px-5">
         <div className="flex items-center gap-2">
@@ -176,6 +218,29 @@ const SalesForm = () => {
             </div>
           )}
         </div>
+        <div className="w-[100%] mt-5">
+          <TableProductSales title={titleProductTable} data={productAdddSale} />
+        </div>
+
+        <div className="mt-5 flex items-center justify-end gap-5 px-8">
+          <h2 className="font-bold text-lg text-[#474d59]">Descuento:</h2>
+          <p className="text-sm sm:text-base text-[#474d59]">
+            S/.{" "}
+            {productAdddSale.length <= 0
+              ? "0.00"
+              : calDiscountProduct(productAdddSale)}
+          </p>
+        </div>
+        <div className="mt-5 flex items-center justify-end gap-5 px-8">
+          <h2 className="font-bold text-lg text-[#474d59]">Total a Pagar:</h2>
+          <p className="text-sm sm:text-base text-[#474d59]">
+            S/.{" "}
+            {productAdddSale.length <= 0
+              ? "0.00"
+              : calSubTotalProduct(productAdddSale)}
+          </p>
+        </div>
+
         <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-5">
           <SelectedComponent
             title="Medio de Pago"

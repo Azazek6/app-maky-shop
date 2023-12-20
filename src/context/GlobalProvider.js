@@ -19,6 +19,7 @@ export const GlobalContextProvider = ({ children }) => {
   //Estados carrito de compra
   const [addProductToCar, setAddProductToCar] = useState([]);
   //Estados Principales
+  const [productAdddSale, setProductAdddSale] = useState([]); // Productos que se agregan para emitir venta
   const [tokenData, setTokenData] = useState(null);
   const [tokenPanel, setTokenPanel] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -89,7 +90,20 @@ export const GlobalContextProvider = ({ children }) => {
   const handleClickShowActionBar = () => setActionBar(!actionBar);
   const handleClickShowCredential = () => setShowCredentials(!showCredentials);
 
+  const addProductSales = (product) => {
+    setProductAdddSale([...productAdddSale, product]);
+  };
+
+  const removeProductSales = (id) => {
+    const existingProduct = productAdddSale.filter(
+      (item) => item.id_product != id
+    );
+
+    setProductAdddSale(existingProduct);
+  };
   // ----------------------------------------------- FUNCIONES PRINCIPALES --------------------------------------------------
+  // Productos para venta
+
   // -------------- Credenciales
   const signInClient = async (auth) => {
     return await axios.post(`${host}/auth/client`, auth);
@@ -297,6 +311,9 @@ export const GlobalContextProvider = ({ children }) => {
         actionBar,
         tokenPanel,
         userData,
+        productAdddSale,
+        addProductSales,
+        removeProductSales,
         addShoppingCar,
         removeShoppingCar,
         addProductToCar,

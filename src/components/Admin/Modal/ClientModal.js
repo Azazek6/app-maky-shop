@@ -159,7 +159,7 @@ const ClientModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
                           />
                           <button
                             onClick={handleClickSearch}
-                            className="w-[100%] sm:w-[50%] mt-5 bg-[#117936] text-white p-2 rounded-lg hover:opacity-70 transition-all duration-300 ease-in-out"
+                            className="w-[100%] sm:w-[50%] mt-5 sm:mt-0 bg-[#117936] text-white p-2 rounded-lg hover:opacity-70 transition-all duration-300 ease-in-out"
                           >
                             BUSCAR
                           </button>

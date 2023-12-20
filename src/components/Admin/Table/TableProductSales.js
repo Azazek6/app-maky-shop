@@ -4,7 +4,8 @@ import ReactPaginate from "react-paginate";
 import { HiOutlinePencilSquare, HiOutlineTrash } from "react-icons/hi2";
 import { useGlobal } from "@/context/GlobalProvider";
 
-const TableSales = ({ section, title, data, pageSize = 5 }) => {
+const TableProductSales = ({ section, title, data, pageSize = 5 }) => {
+  const { removeProductSales } = useGlobal();
   const [currentPage, setCurrentPage] = useState(0);
   const pageCount = Math.ceil(data.length / pageSize);
 
@@ -43,13 +44,7 @@ const TableSales = ({ section, title, data, pageSize = 5 }) => {
                   scope="col"
                   className="transition-all duration-300 ease-in-out px-6 py-3 text-xs font-semibold text-left text-[#b9b8b8] sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-sm xl:text-sm hover:text-[#fff]"
                 >
-                  Editar
-                </th>
-                <th
-                  scope="col"
-                  className="transition-all duration-300 ease-in-out px-6 py-3 text-xs font-semibold text-left text-[#b9b8b8] sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-sm xl:text-sm hover:text-[#fff]"
-                >
-                  Borrar
+                  Acciones
                 </th>
               </tr>
             </thead>
@@ -62,12 +57,7 @@ const TableSales = ({ section, title, data, pageSize = 5 }) => {
                       {globalIndex}
                     </td>
                     {title?.map((item) => {
-                      const value =
-                        datas[item.id] == 1
-                          ? "Activado"
-                          : datas[item.id] == 0
-                          ? "Desactivado"
-                          : datas[item.id];
+                      const value = datas[item.id];
                       return (
                         <td
                           key={item.id}
@@ -77,31 +67,13 @@ const TableSales = ({ section, title, data, pageSize = 5 }) => {
                         </td>
                       );
                     })}
-                    <td className="px-6 py-4 text-xs whitespace-nowrap sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-base xl:text-xs">
-                      {datas.role?.nombre == "USUARIO_PANEL" ? (
-                        <Link
-                          className="text-green-500 hover:text-green-700"
-                          href={`/admin/dashboard/${section}/edit/${datas.id}`}
-                        >
-                          <HiOutlinePencilSquare className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
-                        </Link>
-                      ) : (
-                        ""
-                      )}
-
-                      {!datas.role && (
-                        <Link
-                          className="text-green-500 hover:text-green-700"
-                          href={`/admin/dashboard/${section}/edit/${datas.id}`}
-                        >
-                          <HiOutlinePencilSquare className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
-                        </Link>
-                      )}
-                    </td>
                     <td className="px-6 py-4 text-xs font-medium text-right whitespace-nowrap sm:px-2 md:px-3 lg:px-4 xl:px-6 sm:text-sm md:text-base lg:text-base xl:text-xs">
                       <Link
                         className="text-red-500 hover:text-red-700"
                         href="#"
+                        onClick={() => {
+                          removeProductSales(datas.id_product);
+                        }}
                       >
                         <HiOutlineTrash className="sm:text-sm md:text-base lg:text-base xl:text-xl" />
                       </Link>
@@ -138,4 +110,4 @@ const TableSales = ({ section, title, data, pageSize = 5 }) => {
   );
 };
 
-export default TableSales;
+export default TableProductSales;

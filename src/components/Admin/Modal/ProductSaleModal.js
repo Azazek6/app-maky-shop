@@ -1,112 +1,100 @@
-import { Fragment, useRef, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import InputComponent from "../InputComponent";
-import SelectedComponent from "../SelectedComponent";
+import InputAutoComplete from "../InputAutoComplete";
 import { useGlobal } from "@/context/GlobalProvider";
-import { toastMessage } from "@/helpers/general";
+import { toastMessage, truncateText } from "@/helpers/general";
 
-const listDocument = [
-  {
-    id: "dni",
-    nombre: "DNI",
-  },
-  {
-    id: "ruc",
-    nombre: "RUC",
-  },
-];
-
-const ClientModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
-  const { createClient, fetchClientForDocument } = useGlobal();
+const ProductSaleModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
+  const { product, fetchProduct, addProductSales } = useGlobal();
   const router = useRouter();
 
-  const [inputStatus, setInputStatus] = useState(true);
-  const [searchDocument, setSearchDocument] = useState("");
-  const [existClient, setExistClient] = useState(false);
-  const [client, setClient] = useState({
-    id: "",
-    type: "",
-    document: "",
-    names: "",
-    lastnames: "",
-    email: "",
-    phone: "",
+  const [productData, setProductData] = useState({
+    code: "",
+    id_product: "",
+    product: "",
+    price: "",
+    igv: "",
+    stock_product: "",
+    stock: "",
+    monto_total: "",
+    discount: "",
   });
 
-  const handleChange = ({ target: { name, value } }) => {
-    setClient({ ...client, [name]: value });
-  };
-
-  const handleChangeSearch = (e) => {
-    setSearchDocument(e.target.value);
-  };
-
   const clearData = () => {
-    setClient({
-      id: "",
-      type: "",
-      document: "",
-      names: "",
-      lastnames: "",
-      email: "",
-      phone: "",
+    setProductData({
+      code: "",
+      id_product: "",
+      product: "",
+      price: "",
+      igv: "",
+      stock_product: "",
+      stock: "",
+      monto_total: "",
+      discount: "",
     });
   };
 
-  const handleClickSearch = async (e) => {
+  const handleChange = ({ target: { name, value } }) => {
+    setProductData({ ...productData, [name]: value });
+  };
+
+  const handleClickSaveProducts = (e) => {
     e.preventDefault();
-    if (searchDocument == "") {
-      toastMessage("Campo vacio para la busqueda", 2);
+
+    if (productData.id_product == "") {
+      toastMessage("Debe seleccionar un producto", 2);
       return;
     }
 
-    try {
-      const { status, data } = await fetchClientForDocument(searchDocument);
-
-      if (status == 200) {
-        toastMessage("Cliente encontrado", 1);
-        dataClient.id_client = data.id_cliente;
-        dataClient.type = data.tipo_documento;
-        dataClient.document = data.documento;
-        dataClient.names = data.nombres;
-        setClient({
-          id: data.id_cliente,
-          type: data.tipo_documento,
-          document: data.documento,
-          names: data.nombres,
-          lastnames: data.apellidos,
-          email: data.email,
-          phone: data.telefono,
-        });
-        setOpen(false);
-      }
-    } catch (error) {
-      clearData();
-      toastMessage(error.response.data.message, 3);
+    if (productData.stock == "") {
+      toastMessage("Debe ingresar una cantidad a adquirir", 2);
+      return;
     }
+
+    if (productData.discount != "") {
+      if (productData.discount <= 0) {
+        toastMessage("El descuento no puede ser 0 o menor", 2);
+        return;
+      }
+    }
+
+    if (productData.stock <= 0) {
+      toastMessage("La cantidad a adquirir no debe ser 0 o menor", 2);
+      return;
+    }
+
+    let total_amount = 0;
+
+    if (productData.discount > 0) {
+      total_amount =
+        parseFloat(productData.stock) * parseFloat(productData.price) -
+        parseFloat(productData.discount);
+    }
+
+    if (productData.discount == "") {
+      total_amount =
+        parseFloat(productData.stock) * parseFloat(productData.price);
+    }
+
+    addProductSales({
+      code: productData.code,
+      id_product: productData.id_product,
+      product: truncateText(productData.product, 20),
+      stock: productData.stock,
+      price: productData.price,
+      igv: productData.igv,
+      monto_total: total_amount.toFixed(2),
+      discount: productData.discount == "" ? 0 : productData.discount,
+    });
+
+    toastMessage("Producto agregado", 1);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const { status, data } = await createClient(client);
-
-      if (status == 201) {
-        dataClient.id_client = data.id;
-        dataClient.type = client.type.toUpperCase();
-        dataClient.document = client.document.toUpperCase();
-        dataClient.names = client.names.toUpperCase();
-        toastMessage(data.message, 1);
-        clearData();
-        setOpen(false);
-        setExistClient(false);
-      }
-    } catch (error) {
-      toastMessage(error.response.data.message, 3);
-    }
-  };
+  useEffect(() => {
+    fetchProduct();
+  }, []);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -114,7 +102,10 @@ const ClientModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen}
+        onClose={() => {
+          clearData();
+          setOpen(false);
+        }}
       >
         <Transition.Child
           as={Fragment}
@@ -147,122 +138,80 @@ const ClientModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
                     </div> */}
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <h2 className="text-xl sm:text-3xl font-bold text-[#ff7f51]">
-                        Detalle del Cliente
+                        Detalle de Producto
                       </h2>
-                      {!existClient && (
-                        <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-5 sm:mt-3">
-                          <InputComponent
-                            placeholder="Documento a buscar"
-                            type="number"
-                            onChange={handleChangeSearch}
-                            classStyle="w-[100%]"
-                          />
-                          <button
-                            onClick={handleClickSearch}
-                            className="w-[100%] sm:w-[50%] mt-5 bg-[#117936] text-white p-2 rounded-lg hover:opacity-70 transition-all duration-300 ease-in-out"
-                          >
-                            BUSCAR
-                          </button>
-                        </div>
-                      )}
-
-                      {existClient && (
-                        <>
-                          <h3 className="text-[#ff5151] font-semibold text-sm sm:text-lg mt-5 hidden sm:block">
-                            Datos
-                          </h3>
-                          <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-3">
-                            <SelectedComponent
-                              title="Tipo de Documento"
-                              data={listDocument}
-                              name="type"
-                              value={client.type}
-                              handleChange={handleChange}
-                            />
-                            <InputComponent
-                              placeholder="Documento"
-                              type="number"
-                              read={inputStatus}
-                              name="document"
-                              value={client.document}
-                              onChange={handleChange}
-                              classStyle="mt-3 sm:mt-0"
-                            />
-                          </div>
-                          <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-3">
-                            <InputComponent
-                              placeholder="Nombres"
-                              read={inputStatus}
-                              name="names"
-                              value={client.names}
-                              onChange={handleChange}
-                            />
-                            <InputComponent
-                              placeholder="Apellidos (opcional)"
-                              read={inputStatus}
-                              name="lastnames"
-                              value={client.lastnames}
-                              onChange={handleChange}
-                              classStyle="mt-3 sm:mt-0"
-                            />
-                            <InputComponent
-                              placeholder="Correo (opcional)"
-                              type="email"
-                              read={inputStatus}
-                              name="email"
-                              value={client.email}
-                              onChange={handleChange}
-                              classStyle="mt-3 sm:mt-0"
-                            />
-                          </div>
-                          <div className="w-[100%] flex-row gap-5 items-center sm:flex mt-3">
-                            <InputComponent
-                              placeholder="Teléfono (opcional)"
-                              type="number"
-                              read={inputStatus}
-                              name="phone"
-                              value={client.phone}
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </>
-                      )}
+                    </div>
+                    <InputAutoComplete
+                      options={product}
+                      dataProduct={setProductData}
+                    />
+                    <div className="mt-5">
+                      <div className="flex items-center gap-5">
+                        <InputComponent
+                          placeholder={
+                            productData.price != ""
+                              ? `Precio: S/. ${productData.price}`
+                              : "Precio"
+                          }
+                          read={true}
+                          name="price"
+                          //value={productData.price}
+                          onChange={handleChange}
+                        />
+                        <InputComponent
+                          placeholder="18% de IGV"
+                          read={true}
+                          name="igv"
+                          //value={productData.igv}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="flex items-center gap-5 mt-3">
+                        <InputComponent
+                          placeholder={`Cantidad disponible: ${productData.stock_product}`}
+                          read={true}
+                          name="stock_product"
+                          //value={productData.stock_product}
+                          onChange={handleChange}
+                        />
+                        <InputComponent
+                          placeholder="Cantidad a comprar"
+                          type="number"
+                          name="stock"
+                          value={productData.stock}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="mt-5">
+                        <InputComponent
+                          placeholder="Descuento (opcional)"
+                          type="number"
+                          name="discount"
+                          value={productData.discount}
+                          onChange={handleChange}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  {existClient && (
-                    <button
-                      type="submit"
-                      onClick={handleSubmit}
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 mb-4 sm:mb-0 sm:ml-3 sm:w-auto"
-                      ref={cancelButtonRef}
-                    >
-                      Guardar
-                    </button>
-                  )}
+                  <button
+                    type="submit"
+                    onClick={handleClickSaveProducts}
+                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 mb-4 sm:mb-0 sm:ml-3 sm:w-auto"
+                    ref={cancelButtonRef}
+                  >
+                    Agregar
+                  </button>
 
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-[#fba56c] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-70 mb-4 sm:mb-0 sm:ml-3 sm:w-auto"
-                    onClick={() => {
-                      if (inputStatus) {
-                        setInputStatus(false);
-                        setExistClient(true);
-                      } else {
-                        clearData();
-                        setInputStatus(true);
-                        setExistClient(false);
-                      }
-                    }}
-                  >
-                    {inputStatus ? "Nuevo" : "Cancelar"}
-                  </button>
-                  <button
-                    type="button"
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      clearData();
+                      setOpen(false);
+                    }}
                     ref={cancelButtonRef}
                   >
                     Cerrar
@@ -277,4 +226,4 @@ const ClientModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
   );
 };
 
-export default ClientModal;
+export default ProductSaleModal;

@@ -28,6 +28,16 @@ export const calSubTotalProduct = (product) => {
   return parseFloat(total).toFixed(2);
 };
 
+// Calcular el descuento del producto
+export const calDiscountProduct = (product) => {
+  let total = product.reduce(
+    (acc, currItem) => acc + parseFloat(currItem.discount),
+    0
+  );
+
+  return parseFloat(total).toFixed(2);
+};
+
 export const truncateText = (text, maxLength) => {
   if (text.length > maxLength) {
     return text.slice(0, maxLength) + "...";
