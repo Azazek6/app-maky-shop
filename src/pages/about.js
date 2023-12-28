@@ -14,10 +14,7 @@ const About = () => {
       </div>
       <div className="w-[60%] m-auto mt-6 flex ">
         <p className="text-lg text-[#4f5665]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
-          possimus illum officia dolor sint vitae, suscipit tempore tempora
-          ipsa, aliquid, consequatur at fugit! Adipisci, quam nam. Molestiae
-          ducimus expedita beatae.
+          En nuestra tienda de ropa, nos apasiona ofrecer prendas de moda de alta calidad para hombres, mujeres y niños. Nos esforzamos por brindar una experiencia de compra excepcional, donde nuestros clientes puedan encontrar prendas que reflejen su estilo personal y los hagan sentir cómodos y seguros. Nuestra misión es ayudarte a expresar tu estilo y ofrecerte una amplia selección de ropa para todas las ocasiones. ¡Gracias por elegirnos como tu destino de moda!
         </p>
       </div>
       <div className="mt-12 flex justify-center">
