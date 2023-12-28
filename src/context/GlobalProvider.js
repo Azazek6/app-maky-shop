@@ -94,6 +94,10 @@ export const GlobalContextProvider = ({ children }) => {
     setProductAdddSale([...productAdddSale, product]);
   };
 
+  const clearProductSales = () => {
+    setProductAdddSale([]);
+  };
+
   const removeProductSales = (id) => {
     const existingProduct = productAdddSale.filter(
       (item) => item.id_product != id
@@ -280,6 +284,17 @@ export const GlobalContextProvider = ({ children }) => {
     return await axios.get(`${host}/clientes/${token}/${id}`);
   };
 
+  // ----------------------------------------- SALES ---------------------------------------------
+  const createSale = async (sale) => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.post(`${host}/ventas/${token}`, sale);
+  };
+
+  const fetchSaleForId = async (id) => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    return await axios.get(`${host}/ventas/${token}/report/${id}`);
+  };
+
   //Credenciales
   useEffect(() => {
     const token = localStorage.getItem("tokenMakyShop");
@@ -313,6 +328,7 @@ export const GlobalContextProvider = ({ children }) => {
         userData,
         productAdddSale,
         addProductSales,
+        clearProductSales,
         removeProductSales,
         addShoppingCar,
         removeShoppingCar,
@@ -348,6 +364,8 @@ export const GlobalContextProvider = ({ children }) => {
         createClient,
         fetchClients,
         fetchClientForDocument,
+        createSale,
+        fetchSaleForId,
         showCredentials,
         handleClickShowActionBar,
         handleClickShowCredential,

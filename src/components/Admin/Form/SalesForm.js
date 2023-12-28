@@ -7,9 +7,14 @@ import InputComponent from "../InputComponent";
 import SelectedComponent from "../SelectedComponent";
 import ClientModal from "../Modal/ClientModal";
 import ProductSaleModal from "../Modal/ProductSaleModal";
+import DownloadPDFSales from "../Modal/DownloadPDFSales";
 import TableProductSales from "../Table/TableProductSales";
 import { useGlobal } from "@/context/GlobalProvider";
-import { calSubTotalProduct, calDiscountProduct } from "@/helpers/general";
+import {
+  toastMessage,
+  calSubTotalProduct,
+  calDiscountProduct,
+} from "@/helpers/general";
 
 const typeMethod = [
   {
@@ -23,6 +28,10 @@ const typeMethod = [
 ];
 
 const paymentMethod = [
+  {
+    id: "CONTADO",
+    nombre: "CONTADO",
+  },
   {
     id: "TRANSFERENCIA",
     nombre: "TRANSFERENCIA",
@@ -55,25 +64,25 @@ const titleProductTable = [
     name: "Importe",
   },
   {
-    id: "igv",
-    name: "IGV",
-  },
-  {
     id: "discount",
     name: "Descuento",
   },
 ];
 
 const SalesForm = () => {
-  const { productAdddSale } = useGlobal();
+  const { createSale, productAdddSale, clearProductSales } = useGlobal();
   //Modal Cliente
   const [openClient, setOpenClient] = useState(false);
   const cancelButtonRefClient = useRef(null);
   //Modal Producto
   const [openProduct, setOpenProduct] = useState(false);
   const cancelButtonRefProduct = useRef(null);
+  //Modal PDF GENERATE
+  const [openPdf, setOpenPdf] = useState(false);
+  const cancelButtonRefPdf = useRef(null);
 
   //Estados
+  const [idSale, setIdSale] = useState(null);
   const [inputStatus, setInputStatus] = useState(true);
   const [salesForm, setSalesForm] = useState({
     id_client: "",
@@ -102,6 +111,39 @@ const SalesForm = () => {
     setOpenProduct(true);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    salesForm.products = productAdddSale;
+
+    try {
+      const { status, data } = await createSale(salesForm);
+
+      if (status == 201) {
+        toastMessage(data.message, 1);
+        setIdSale(data.id_sale);
+        setInputStatus(true);
+        setSalesForm({
+          id_client: "",
+          type: "",
+          document: "",
+          names: "",
+          date: moment().format("YYYY-MM-DD"),
+          type_purchase: "",
+          id_seller: "",
+          seller: "",
+          observation: "",
+          payment_method: "",
+          amount: "",
+          products: [],
+        });
+        clearProductSales();
+        setOpenPdf(true);
+      }
+    } catch (error) {
+      toastMessage(error.response.data.message, 3);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("tokenMakyPanel");
 
@@ -114,6 +156,12 @@ const SalesForm = () => {
   }, []);
   return (
     <>
+      <DownloadPDFSales
+        idSales={idSale}
+        open={openPdf}
+        setOpen={setOpenPdf}
+        cancelButtonRef={cancelButtonRefPdf}
+      />
       <ClientModal
         dataClient={salesForm}
         open={openClient}
@@ -273,7 +321,11 @@ const SalesForm = () => {
           >
             {inputStatus ? "Nuevo" : "Cancelar"}
           </button>
-          <button className="bg-[#1770a4] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out">
+          <button
+            disabled={inputStatus}
+            onClick={handleSubmit}
+            className="bg-[#1770a4] text-white font-bold p-2 w-[100%] sm:w-[30%] rounded-md hover:opacity-70 transition-all duration-300 ease-in-out"
+          >
             Emitir
           </button>
         </div>

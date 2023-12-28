@@ -65,6 +65,11 @@ const ProductSaleModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
       return;
     }
 
+    if (productData.stock > productData.stock_product) {
+      toastMessage("La cantidad supera el maximo del producto", 2);
+      return;
+    }
+
     let total_amount = 0;
 
     if (productData.discount > 0) {
@@ -159,10 +164,10 @@ const ProductSaleModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
                           onChange={handleChange}
                         />
                         <InputComponent
-                          placeholder="18% de IGV"
-                          read={true}
-                          name="igv"
-                          //value={productData.igv}
+                          placeholder="Descuento (opcional)"
+                          type="number"
+                          name="discount"
+                          value={productData.discount}
                           onChange={handleChange}
                         />
                       </div>
@@ -179,15 +184,6 @@ const ProductSaleModal = ({ dataClient, open, setOpen, cancelButtonRef }) => {
                           type="number"
                           name="stock"
                           value={productData.stock}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="mt-5">
-                        <InputComponent
-                          placeholder="Descuento (opcional)"
-                          type="number"
-                          name="discount"
-                          value={productData.discount}
                           onChange={handleChange}
                         />
                       </div>
