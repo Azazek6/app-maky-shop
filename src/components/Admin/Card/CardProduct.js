@@ -1,13 +1,9 @@
 import { useState, useRef } from "react";
-import Link from "next/link";
 import ReactPaginate from "react-paginate";
-import {
-  HiOutlinePencilSquare,
-  HiOutlineTrash,
-  HiOutlineInformationCircle,
-} from "react-icons/hi2";
+import { HiOutlineInformationCircle } from "react-icons/hi2";
 import ProductDetailModal from "../Modal/ProductDetailModal";
 import { host_product_image } from "@/configuration/utils";
+import { truncateText } from "@/helpers/general";
 
 const CardGeneral = ({ data, pageSize = 6 }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -69,14 +65,18 @@ const CardGeneral = ({ data, pageSize = 6 }) => {
             <div className="w-[60%] flex justify-center items-center p-3 ">
               <img
                 className="w-[100%]"
-                src={datas.imagen == "" ? "/card-item.png" : `${host_product_image}/${datas.imagen}`}
+                src={
+                  datas.imagen == ""
+                    ? "/card-item.png"
+                    : `${host_product_image}/${datas.imagen}`
+                }
                 alt=""
               />
             </div>
             <div className="w-[100%] flex-row p-3 bg-white">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-sm text-[#ff7751] font-bold underline">
-                  {datas.nombre}
+                  {truncateText(datas.nombre, 25)}
                 </h2>
                 <HiOutlineInformationCircle
                   className="text-xl cursor-pointer text-[#4878c5] hover:opacity-70 transition-all duration-300 ease-in-out"
@@ -88,7 +88,9 @@ const CardGeneral = ({ data, pageSize = 6 }) => {
                 />
               </div>
 
-              <p className="text-xs text-[#606879] mb-3">{datas.descripcion}</p>
+              <p className="text-xs text-[#606879] mb-3">
+                {truncateText(datas.descripcion, 150)}
+              </p>
               <div className="w-[100%] flex items-center justify-between">
                 <span className="text-[10px] bg-[#ff7751] text-white px-4 py-1 rounded-lg font-bold">
                   {datas.categoria.nombre}

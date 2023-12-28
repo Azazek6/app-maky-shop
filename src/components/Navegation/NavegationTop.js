@@ -59,12 +59,12 @@ const NavegationTop = () => {
           </Link>
         </div>
         <div className="w-[30%] hidden sm:flex justify-center items-center gap-5 ">
-          <Link
+          {/* <Link
             href="/"
             className="hover:text-[#FF5151] hover:font-bold text-2xl"
           >
             <HiOutlineMagnifyingGlass />
-          </Link>
+          </Link> */}
           {!userData && (
             <Link
               href="/"

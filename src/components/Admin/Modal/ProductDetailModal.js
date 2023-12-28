@@ -121,7 +121,7 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                           S/. {productId?.precio}
                         </p>
                       </div>
-                      <div className="flex items-center justify-center sm:justify-normal gap-2 mt-4">
+                      {/* <div className="flex items-center justify-center sm:justify-normal gap-2 mt-4">
                         <HiMiniStar
                           className={`text-[14px] sm:text-[16px] text-[#FF5E3A]`}
                         />
@@ -134,12 +134,12 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                         <HiMiniStar
                           className={`text-[14px] sm:text-[16px] text-gray-400`}
                         />
-                      </div>
+                      </div> */}
                       <p className="mt-4 text-sm sm:text-base text-[#4F5665]">
                         {productId?.descripcion}
                       </p>
                       {/* SELECCION DE COLORES */}
-                      <h3 className="mt-5 text-[#636c7d] text-sm font-bold">
+                      {/* <h3 className="mt-5 text-[#636c7d] text-sm font-bold">
                         Colores:
                       </h3>
                       <div className="w-[100%] flex items-center justify-center sm:justify-normal gap-5 mt-3">
@@ -152,7 +152,7 @@ const ProductDetailModal = ({ idProduct, open, setOpen, cancelButtonRef }) => {
                         <span
                           className={`w-10 h-10 border rounded-full bg-green-500`}
                         ></span>
-                      </div>
+                      </div> */}
                       {/* SELECCION DE TALLAS */}
                       <h3 className="mt-5 text-[#636c7d] text-sm font-bold">
                         Tallas:

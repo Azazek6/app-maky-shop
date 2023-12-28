@@ -67,7 +67,11 @@ const Footer = () => {
         {category &&
           category.slice(0, 4).map((itemCategory) => (
             <>
-              <Link key={itemCategory.id} href={`/category/${itemCategory.nombre}`} className="text-sm">
+              <Link
+                key={itemCategory.id}
+                href={`/category/${itemCategory.nombre}`}
+                className="text-sm"
+              >
                 {itemCategory.nombre}
               </Link>{" "}
               <br /> <br />
@@ -79,7 +83,11 @@ const Footer = () => {
         {brand &&
           brand.slice(0, 4).map((itemBrand) => (
             <>
-              <Link key={itemBrand.id} href={`/brand/${itemBrand.nombre}`} className="text-sm">
+              <Link
+                key={itemBrand.id}
+                href={`/brand/${itemBrand.nombre}`}
+                className="text-sm"
+              >
                 {itemBrand.nombre}
               </Link>{" "}
               <br /> <br />
@@ -93,18 +101,8 @@ const Footer = () => {
         </Link>{" "}
         <br />
         <br />
-        <Link href="" className="text-sm">
-          Historial
-        </Link>
-        <br />
-        <br />
-        <Link href="" className="text-sm">
-          Historial
-        </Link>
-        <br />
-        <br />
-        <Link href="" className="text-sm">
-          Historial
+        <Link href="/order" className="text-sm">
+          Mi Historial
         </Link>
       </div>
       <div className="w-[100%]">

@@ -7,14 +7,14 @@ import BreadCrumbsData from "@/components/BreadCrumbsData";
 import { useGlobal } from "@/context/GlobalProvider";
 
 const Product = () => {
-  const { fetchProductForId } = useGlobal();
+  const { addShoppingCar, fetchProductForId } = useGlobal();
   const router = useRouter();
 
   //Estados
   const [product, setProduct] = useState(null);
 
   // Estado para guardar el color seleccionado
-  const [selectedColor, setSelectedColor] = useState("");
+  // const [selectedColor, setSelectedColor] = useState("");
 
   // Estado para guardar la talla seleccionada
   const [selectedSize, setSelectedSize] = useState("");
@@ -23,10 +23,10 @@ const Product = () => {
   const [selectedImagePreview, setSelectedImagePreview] =
     useState("user-reseña.png");
 
-  // Función para manejar la selección de color
-  const handleColorSelection = (color) => {
-    setSelectedColor(color);
-  };
+  // // Función para manejar la selección de color
+  // const handleColorSelection = (color) => {
+  //   setSelectedColor(color);
+  // };
 
   // Función para manejar la selección de tallas
   const handleSizeSelection = (size) => {
@@ -193,7 +193,7 @@ const Product = () => {
             </p>
             <p className="text-sm sm:text-xl mt-4">S/. {product?.precio}</p>
           </div>
-          <div className="flex items-center gap-2 mt-4">
+          {/* <div className="flex items-center gap-2 mt-4">
             <HiMiniStar
               className={`text-[12px] sm:text-[16px] text-[#FF5E3A]`}
             />
@@ -206,10 +206,10 @@ const Product = () => {
             <HiMiniStar
               className={`text-[12px] sm:text-[16px] text-gray-400`}
             />
-          </div>
+          </div> */}
           <p className="mt-4 text-lg text-[#4F5665]">{product?.descripcion}</p>
           {/* SELECCION DE COLORES */}
-          <h3 className="mt-5 text-[#636c7d] text-sm font-bold">Color:</h3>
+          {/* <h3 className="mt-5 text-[#636c7d] text-sm font-bold">Color:</h3>
           <div className="w-[100%] flex items-center gap-5 mt-3">
             <label className="flex items-center gap-2">
               <input
@@ -255,7 +255,7 @@ const Product = () => {
                 }`}
               ></span>
             </label>
-          </div>
+          </div> */}
           {/* SELECCION DE TALLAS */}
           <h3 className="mt-5 text-[#636c7d] text-sm font-bold">Talla:</h3>
           <div className="w-[100%] grid grid-cols-8 mt-3 ">
@@ -282,7 +282,23 @@ const Product = () => {
           </div>
           {/* BOTON DE AGREGADO */}
           <div className="w-[100%] mt-8">
-            <button className="w-[50%] bg-[#FF5E3A] hover:opacity-80 text-white py-3 px-6 font-bold rounded-xl">
+            <button
+              onClick={() => {
+                addShoppingCar({
+                  id_producto: product.id_producto,
+                  codigo: product.codigo,
+                  nombre: product.nombre,
+                  stock: product.cantidad,
+                  marca: product.marca,
+                  categoria: product.categoria,
+                  descripcion: product.descripcion,
+                  precio: product.precio,
+                  imagen: product.imagen,
+                  genero: product.genero,
+                });
+              }}
+              className="w-[50%] bg-[#FF5E3A] hover:opacity-80 text-white py-3 px-6 font-bold rounded-xl"
+            >
               Agregar a la bolsa
             </button>
           </div>
