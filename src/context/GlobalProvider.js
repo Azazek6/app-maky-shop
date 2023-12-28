@@ -28,6 +28,7 @@ export const GlobalContextProvider = ({ children }) => {
   const [category, setCategory] = useState([]);
   const [product, setProduct] = useState([]);
   const [order, setOrder] = useState([]);
+  const [sale, setSale] = useState([]);
   const [client, setClient] = useState([]);
 
   // --------------------------------------------- FUNCIONES DEL CARRO DE COMPRA -----------------------------------------
@@ -290,6 +291,15 @@ export const GlobalContextProvider = ({ children }) => {
     return await axios.post(`${host}/ventas/${token}`, sale);
   };
 
+  const fetchSale = async () => {
+    const token = localStorage.getItem("tokenMakyPanel");
+    try {
+      const { data } = await axios.get(`${host}/ventas/${token}`);
+      setSale(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchSaleForId = async (id) => {
     const token = localStorage.getItem("tokenMakyPanel");
     return await axios.get(`${host}/ventas/${token}/report/${id}`);
@@ -340,6 +350,7 @@ export const GlobalContextProvider = ({ children }) => {
         category,
         product,
         order,
+        sale,
         singUp,
         UpdateUser,
         fetchUser,
@@ -365,6 +376,7 @@ export const GlobalContextProvider = ({ children }) => {
         fetchClients,
         fetchClientForDocument,
         createSale,
+        fetchSale,
         fetchSaleForId,
         showCredentials,
         handleClickShowActionBar,
