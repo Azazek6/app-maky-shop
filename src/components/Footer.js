@@ -64,35 +64,39 @@ const Footer = () => {
 
       <div className="w-[100%]">
         <h2 className="font-bold">Categoria</h2> <br />
-        {category &&
-          category.slice(0, 4).map((itemCategory) => (
-            <>
-              <Link
-                key={itemCategory.id}
-                href={`/category/${itemCategory.nombre}`}
-                className="text-sm"
-              >
-                {itemCategory.nombre}
-              </Link>{" "}
-              <br /> <br />
-            </>
-          ))}
+        <div className="overflow-auto h-[60%]">
+          {category &&
+            category.map((itemCategory) => (
+              <>
+                <Link
+                  key={itemCategory.id}
+                  href={`/category/${itemCategory.nombre}`}
+                  className="text-sm"
+                >
+                  {itemCategory.nombre}
+                </Link>{" "}
+                <br /> <br />
+              </>
+            ))}
+        </div>
       </div>
       <div className="w-[100%]">
         <h2 className="font-bold">Marca</h2> <br />
-        {brand &&
-          brand.slice(0, 4).map((itemBrand) => (
-            <>
-              <Link
-                key={itemBrand.id}
-                href={`/brand/${itemBrand.nombre}`}
-                className="text-sm"
-              >
-                {itemBrand.nombre}
-              </Link>{" "}
-              <br /> <br />
-            </>
-          ))}
+        <div className="overflow-auto h-[60%]">
+          {brand &&
+            brand.map((itemBrand) => (
+              <>
+                <Link
+                  key={itemBrand.id}
+                  href={`/brand/${itemBrand.nombre}`}
+                  className="text-sm"
+                >
+                  {itemBrand.nombre}
+                </Link>{" "}
+                <br /> <br />
+              </>
+            ))}
+        </div>
       </div>
       <div className="w-[100%]">
         <h2 className="font-bold">Cuenta</h2> <br />

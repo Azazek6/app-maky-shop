@@ -25,9 +25,9 @@ const CategoryFind = () => {
         Productos de Categoria: {router.query.name}{" "}
       </h2>
       <div className="flex-row sm:flex items-center gap-8">
-        <div className="sm:w-[40%] mb-8 sm:mb-0">
+        {/* <div className="sm:w-[40%] mb-8 sm:mb-0">
           <InputComponent placeholder="Ingrese nombre de producto a buscar" />
-        </div>
+        </div> */}
         <div className="sm:w-[60%] grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <CardItem item={filteredProduct} />
         </div>
