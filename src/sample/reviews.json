@@ -3,24 +3,24 @@
     "id": 1,
     "image": "user-reseña.png",
     "color": "bg-[#FF5E3A]",
-    "name": "Nombre 1",
-    "description": "Lorem Ispum is a placeholder text commomly used as a free text.",
-    "date": "10 January 2021"
+    "name": "Sandra Ramos",
+    "description": "Mi experiencia en Maky's ha sido excepcional. El personal de Maky's es amigable y conocedor de las últimas tendencias de moda. Me ayudaron a encontrar el atuendo perfecto para una ocasión especial y me sentí increíble. Además, el servicio postventa en Maky's es excelente. Definitivamente, Maky's se preocupa por la satisfacción del cliente. ¡No puedo recomendar Maky's lo suficiente!",
+    "date": "10 Noviembre 2023"
   },
   {
     "id": 2,
     "image": "user-reseña.png",
     "color": "bg-[#F3A916]",
-    "name": "Nombre 2",
-    "description": "Lorem Ispum is a placeholder text commomly used as a free text.",
-    "date": "10 January 2021"
+    "name": "Penelope Gutierrez",
+    "description": "¡Qué gran descubrimiento es Maky's! Esta tienda tiene una excelente reputación y ahora entiendo por qué. Las prendas de Maky's son de alta calidad y tienen diseños únicos que no encuentro en ningún otro lugar. Me siento genial cada vez que uso algo de Maky's. Sin duda, Maky's se ha convertido en mi tienda de ropa favorita",
+    "date": "20 Noviembre 2023"
   },
   {
     "id": 3,
     "image": "user-reseña.png",
     "color": "bg-[#FEACB6]",
-    "name": "Nombre 3",
-    "description": "Lorem Ispum is a placeholder text commomly used as a free text.",
-    "date": "10 January 2021"
+    "name": "Elsa Vargas",
+    "description": "Me encanta la tienda Maky's. Siempre encuentro prendas de alta calidad y a la moda a precios muy razonables. El personal de Maky's es amable y servicial, siempre dispuesto a ayudarme a encontrar el look perfecto. Definitivamente recomendaría Maky's a todos mis amigos y familiares",
+    "date": "01 Diciembre 2023"
   }
 ]
